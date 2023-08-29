@@ -7,7 +7,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class TeacherLoginDTO {
+public class LoginDTO {
     private Long id;
     private  String password;
 }

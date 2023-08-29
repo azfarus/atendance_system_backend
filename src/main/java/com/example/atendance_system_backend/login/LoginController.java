@@ -19,11 +19,13 @@ public class LoginController {
 
     @Autowired
     TeacherRepository teacher_db;
-    @GetMapping("/teacher")
+
+    @CrossOrigin
+    @PostMapping("/teacher")
     @ResponseBody
-    public  ResponseEntity<String> teacher_login(@RequestBody TeacherLoginDTO tchr_login_dto){
+    public  ResponseEntity<String> teacher_login(@RequestBody LoginDTO tchr_login_dto){
         Optional<Teacher> teacher = teacher_db.findTeacherById(tchr_login_dto.getId());
-        System.out.println(tchr_login_dto.getId());
+        System.out.println("Hello"+ tchr_login_dto.getId());
         if(teacher.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FALSE");
         }
@@ -32,6 +34,16 @@ public class LoginController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FALSE");
     }
+
+    @CrossOrigin
+    @PostMapping("/student")
+    @ResponseBody
+    public  ResponseEntity<String> student_login(@RequestBody LoginDTO stdnt_login_dto){
+
+        return ResponseEntity.status(HttpStatus.OK).body("TRUE");
+    }
+
+
 
 
 }
