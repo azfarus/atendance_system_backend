@@ -28,7 +28,7 @@ public class AdminPanelController {
     @Autowired
     DepartmentRepository departmentDB;
     @CrossOrigin
-    @GetMapping("/teacher")
+    @PostMapping("/teacher")
     @ResponseBody
     private ResponseEntity<String> save_teacher(@RequestParam Long id , @RequestParam String password , @RequestParam String name , @RequestParam String email){
         Teacher new_teacher = new Teacher(id , password , name , email , null);
