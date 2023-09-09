@@ -1,4 +1,4 @@
-package com.example.atendance_system_backend.login;
+package com.example.atendance_system_backend.controller;
 
 import lombok.Data;
 import lombok.Getter;

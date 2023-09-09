@@ -1,4 +1,4 @@
-package com.example.atendance_system_backend.login;
+package com.example.atendance_system_backend.controller;
 
 import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +32,12 @@ public class AdminPanelController {
     @CrossOrigin
     @PostMapping("/teacher")
     @ResponseBody
-    private ResponseEntity<String> save_teacher(@RequestParam Long id , @RequestParam String password , @RequestParam String name , @RequestParam String email){
+    private ResponseEntity<String> save_teacher(@RequestParam Long id ,
+                                                @RequestParam String password ,
+                                                @RequestParam String name ,
+                                                @RequestParam String email){
+
+
         Teacher new_teacher = new Teacher(id , password , name , email , null);
         teacherDB.save(new_teacher);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
@@ -39,7 +46,11 @@ public class AdminPanelController {
     @CrossOrigin
     @PostMapping("/course")
     @ResponseBody
-    private ResponseEntity<String> save_course(@RequestParam String department , @RequestParam Long courseId , @RequestParam Long count , @RequestParam Character section , @RequestParam Long teacherId){
+    private ResponseEntity<String> save_course(@RequestParam String department ,
+                                               @RequestParam Long courseId ,
+                                               @RequestParam Long count ,
+                                               @RequestParam Character section ,
+                                               @RequestParam Long teacherId){
 
         Optional<Teacher> responsible_teacher = teacherDB.findTeacherById(teacherId);
         if(responsible_teacher.isEmpty()){
@@ -64,5 +75,8 @@ public class AdminPanelController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(dept_names);
     }
+
+
+
 
 }

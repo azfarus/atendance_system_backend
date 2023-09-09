@@ -1,4 +1,4 @@
-package com.example.atendance_system_backend.student;
+package com.example.atendance_system_backend.admin;
 
 
 import lombok.AllArgsConstructor;
@@ -14,18 +14,10 @@ import javax.persistence.Id;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Student {
+public class Admin {
     @Id
-    private  Long id;
+    private Long id;
 
-    private  String name;
-
-    private String mail;
-
-    private  String password;
-
-    private Long semester;
-
-    private  String department;
+    private String password;
 
 }
