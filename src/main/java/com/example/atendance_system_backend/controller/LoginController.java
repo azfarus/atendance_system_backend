@@ -6,6 +6,9 @@ package com.example.atendance_system_backend.controller;
 
 import com.example.atendance_system_backend.admin.Admin;
 import com.example.atendance_system_backend.admin.AdminRepository;
+import com.example.atendance_system_backend.hasher.StringHasher;
+import com.example.atendance_system_backend.session.MySession;
+import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
 import com.example.atendance_system_backend.student.StudentRepository;
 import com.example.atendance_system_backend.teacher.Teacher;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
@@ -33,6 +39,9 @@ public class LoginController {
     @Autowired
     AdminRepository admin_db;
 
+    @Autowired
+    MySessionRepository sessionDB;
+
     @CrossOrigin
     @PostMapping("/teacher")
     @ResponseBody
@@ -47,9 +56,8 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FALSE");
         }
         if(teacher.get().getPassword().equals(tchr_login_dto.getPassword()) && (teacher.get().getId().equals(tchr_login_dto.getId()))){
-            session.setAttribute("teacherid" , teacher.get().getId());
-            session.setAttribute("loggedin" , true);
-            return ResponseEntity.status(HttpStatus.OK).body("TRUE");
+            String ret = create_session(teacher.get().getId().toString(), teacher.get().getPassword() , "teacher");
+            return ResponseEntity.status(HttpStatus.OK).body(ret);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FALSE");
     }
@@ -69,9 +77,9 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FALSE");
         }
         if(student.get().getPassword().equals(stdnt_login_dto.getPassword()) && (student.get().getId().equals(stdnt_login_dto.getId()))){
-            session.setAttribute("studentid" , student.get().getId());
-            session.setAttribute("loggedin" , true);
-            return ResponseEntity.status(HttpStatus.OK).body("TRUE");
+
+            String ret = create_session(student.get().getId().toString(), student.get().getPassword() , "student");
+            return ResponseEntity.status(HttpStatus.OK).body(ret);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FALSE");
     }
@@ -91,9 +99,8 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FALSE");
         }
         if(admin.get().getPassword().equals(admn_login_dto.getPassword()) && (admin.get().getId().equals(admn_login_dto.getId()))){
-            session.setAttribute("adminid" , admin.get().getId());
-            session.setAttribute("loggedin" , true);
-            return ResponseEntity.status(HttpStatus.OK).body("TRUE");
+
+            return ResponseEntity.status(HttpStatus.OK).body(create_session(admin.get().getId().toString() , admin.get().getPassword() , "admin") );
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FALSE");
     }
@@ -106,7 +113,12 @@ public class LoginController {
 
     }
 
-
+    private String create_session(String id , String pass , String type){
+       String session = StringHasher.hashString(id+pass);
+        MySession ms = new MySession(session , Instant.now() , Long.parseLong(id) , type);
+       sessionDB.save(ms);
+       return session;
+    }
 
 
 }

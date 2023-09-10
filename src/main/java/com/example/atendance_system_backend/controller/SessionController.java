@@ -1,5 +1,8 @@
 package com.example.atendance_system_backend.controller;
 
+import com.example.atendance_system_backend.session.MySession;
+import com.example.atendance_system_backend.session.MySessionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -14,61 +18,43 @@ import java.util.Map;
 public class SessionController {
 
 
+    @Autowired
+    MySessionRepository sessionDB;
+
     @CrossOrigin
-    @GetMapping("/get-teacher-session-data")
+    @GetMapping("/get-session-data")
     @ResponseBody
     private ResponseEntity<Long> teacher_session_attribute_retrieval(HttpServletRequest hsr){
 
-        HttpSession session = hsr.getSession();
-        if(session == null || session.isNew()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((long)-2);
+        if(check_session(hsr)){
+            return ResponseEntity.status(HttpStatus.OK).body(get_session_id(hsr));
         }
-
-        Long teacherid = (Long) session.getAttribute("teacherid");
-        if(teacherid == null){
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((long)-1);
-        }
-        else return ResponseEntity.status(HttpStatus.OK).body(teacherid);
-
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
     }
 
-    @CrossOrigin
-    @GetMapping("/get-student-session-data")
-    @ResponseBody
-    private ResponseEntity<Long> student_session_attribute_retrieval(HttpServletRequest hsr){
-
-        HttpSession session = hsr.getSession();
-        if(session == null || session.isNew()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((long)-2);
-        }
-
-        Long studentid = (Long) session.getAttribute("studentid");
-        if(studentid == null){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-        else return ResponseEntity.status(HttpStatus.OK).body(studentid);
 
 
+    public  boolean check_session(HttpServletRequest hsr){
+
+
+        String id = hsr.getHeader("mysession");
+        System.out.println(id);
+        if(id == null) return  false;
+        Optional<MySession> sess= sessionDB.findById(id);
+
+        return sess.isPresent();
     }
 
-    @CrossOrigin
-    @GetMapping("/get-admin-session-data")
-    @ResponseBody
-    private ResponseEntity<Long> admin_session_attribute_retrieval(HttpServletRequest hsr){
-
-        HttpSession session = hsr.getSession();
-        if(session == null || session.isNew()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((long)-2);
-        }
-
-        Long adminid = (Long) session.getAttribute("adminid");
-        if(adminid == null){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-        else return ResponseEntity.status(HttpStatus.OK).body(adminid);
+    public  Long get_session_id(HttpServletRequest hsr){
 
 
+        String id = hsr.getHeader("mysession");
+        System.out.println(id);
+        if(id == null) return  null;
+        Optional<MySession> sess= sessionDB.findById(id);
+        if(sess.isPresent())
+            return sess.get().getId();
+        else return  null;
     }
 }
