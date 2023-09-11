@@ -3,6 +3,8 @@ package com.example.atendance_system_backend.controller;
 
 import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
+import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
+import com.example.atendance_system_backend.coursereg.StudentTakesCourseRepository;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class CourseRegistrationController {
     CourseRepository courseDB;
 
     @Autowired
+    StudentTakesCourseRepository regDB;
+
+    @Autowired
     MySessionRepository sessionDB;
     @GetMapping("/get-course-by-dept")
     @ResponseBody
@@ -47,7 +52,7 @@ public class CourseRegistrationController {
 
     @PostMapping("/register")
     @ResponseBody
-    private ResponseEntity<String> register_course(@RequestParam String department ,Long course , HttpServletRequest hsr){
+    private ResponseEntity<String> register_course(@RequestParam Long stud_id ,@RequestParam String department ,@RequestParam Long course , HttpServletRequest hsr){
 
         if(!check_session(hsr)) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
@@ -56,6 +61,9 @@ public class CourseRegistrationController {
         if(reg_course.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("NO COURSE");
 
 
+        StudentTakesCourse new_reg = new StudentTakesCourse(stud_id , reg_course.get().getHid());
+
+        regDB.save(new_reg);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("ok");
 

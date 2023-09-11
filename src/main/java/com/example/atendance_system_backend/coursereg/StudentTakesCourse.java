@@ -8,13 +8,20 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@IdClass(StudentCourseIdClass.class)
 public class StudentTakesCourse {
     @Id
-    private Long id;
+    private Long studentId;
+
+    @Id
+    private Long courseHid;
+
+
 }
