@@ -28,6 +28,8 @@ public class Course {
 
     private Character section;
 
+    private Long semester;
+
     @ManyToOne
     @JoinColumn(nullable = true)
     private Teacher teacher;

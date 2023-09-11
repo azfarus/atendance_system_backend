@@ -60,7 +60,8 @@ public class AdminPanelController {
                                                @RequestParam Long courseId ,
                                                @RequestParam Long count ,
                                                @RequestParam Character section ,
-                                               @RequestParam Long teacherId, HttpServletRequest hsr){
+                                               @RequestParam Long teacherId,
+                                               @RequestParam Long semester , HttpServletRequest hsr){
 
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
@@ -68,7 +69,7 @@ public class AdminPanelController {
         if(responsible_teacher.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Teacher Not Found");
         }
-        Course new_course = new Course(null , department , courseId , count , section , responsible_teacher.get());
+        Course new_course = new Course(null , department , courseId , count , section ,semester , responsible_teacher.get());
         courseDB.save(new_course);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
     }
@@ -80,12 +81,14 @@ public class AdminPanelController {
                                                @RequestParam Long id ,
                                                @RequestParam String password ,
                                                @RequestParam String email ,
-                                               @RequestParam String guardianEmail, HttpServletRequest hsr){
+                                               @RequestParam String guardianEmail,
+                                                @RequestParam String department ,
+                                               @RequestParam Long semester , HttpServletRequest hsr){
 
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
 
-        Student new_student = new Student(id , name , email , password , (long)1 , "CSE");
+        Student new_student = new Student(id , name , email , password , semester , department);
         studentDB.save(new_student);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
     }

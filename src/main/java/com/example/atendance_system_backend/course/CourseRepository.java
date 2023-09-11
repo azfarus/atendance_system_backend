@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.Entity;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -13,4 +14,6 @@ public interface CourseRepository extends JpaRepository<Course , Long> {
 
 
     Optional<Course> findCourseByDepartmentAndCourseId(String department , Long courseID);
+    List<Course> findCoursesByDepartment(String department);
+
 }
