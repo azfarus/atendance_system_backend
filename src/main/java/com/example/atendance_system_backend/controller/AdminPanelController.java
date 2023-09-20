@@ -10,6 +10,8 @@ import com.example.atendance_system_backend.student.Student;
 import com.example.atendance_system_backend.student.StudentRepository;
 import com.example.atendance_system_backend.teacher.Teacher;
 import com.example.atendance_system_backend.teacher.TeacherRepository;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -115,16 +118,25 @@ public class AdminPanelController {
 
 
     @PostMapping("/upload-csv")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
+    public String uploadFile(@RequestParam("file") MultipartFile file , @RequestParam int type) {
         try {
             // Check if the uploaded file is not empty
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
-                String uploadDirectory = System.getProperty("user.dir") +"/src/main/resources/static/";
+                String uploadDirectory = System.getProperty("user.dir") +"/src/main/resources/";
 
                 // Save the file to the specified directory within the project
                 file.transferTo(new File(uploadDirectory + fileName));
 
+                switch (type){
+                    case 1:
+                        insert_student_csv(uploadDirectory + fileName);
+                        break;
+                    default:
+                        return "Invalid Param";
+
+                }
+                insert_student_csv(uploadDirectory + fileName);
                 return "File uploaded successfully!";
             } else {
                 return "File is empty!";
@@ -145,5 +157,37 @@ public class AdminPanelController {
         return sess.isPresent() && sess.get().getType().equals("admin");
     }
 
+    private boolean insert_student_csv(String filepath){
+        try {
+            // Create a CSVReader object with the file path
+            FileReader reader = new FileReader(filepath);
+            CSVReader csvReader = new CSVReader(reader);
+
+            // Read all the rows from the CSV file
+            List<String[]> records = csvReader.readAll();
+
+            // Loop through the records and process each row
+            for (String[] record : records) {
+                Long id = Long.parseLong(record[0]);
+                String name = record[1];
+                String mail = record[2];
+                String pass = record[3];
+                Long semester = Long.parseLong(record[4]);
+                String dept = record[5];
+
+                Student s = new Student(id , name , mail , pass, semester , dept);
+                studentDB.save(s);
+                //System.out.println(); // Move to the next line for the next record
+            }
+
+            // Close the CSVReader
+            csvReader.close();
+            return true;
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 
 }
