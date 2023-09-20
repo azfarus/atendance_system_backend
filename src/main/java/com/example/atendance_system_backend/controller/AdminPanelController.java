@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -109,6 +112,28 @@ public class AdminPanelController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(dept_names);
     }
 
+
+
+    @PostMapping("/upload-csv")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            // Check if the uploaded file is not empty
+            if (!file.isEmpty()) {
+                String fileName = file.getOriginalFilename();
+                String uploadDirectory = System.getProperty("user.dir") +"/src/main/resources/static/";
+
+                // Save the file to the specified directory within the project
+                file.transferTo(new File(uploadDirectory + fileName));
+
+                return "File uploaded successfully!";
+            } else {
+                return "File is empty!";
+            }
+        } catch (IOException e) {
+            return "File upload failed: " + e.getMessage();
+        }
+    }
+
     public  boolean check_session(HttpServletRequest hsr){
 
 
@@ -119,7 +144,6 @@ public class AdminPanelController {
 
         return sess.isPresent() && sess.get().getType().equals("admin");
     }
-
 
 
 }
