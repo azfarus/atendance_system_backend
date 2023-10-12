@@ -23,9 +23,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/admin")
@@ -66,18 +64,42 @@ public class AdminPanelController {
                                                @RequestParam Long courseId ,
                                                @RequestParam Long count ,
                                                @RequestParam Character section ,
-                                               @RequestParam Long teacherId,
                                                @RequestParam Long semester , HttpServletRequest hsr){
 
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
-        Optional<Teacher> responsible_teacher = teacherDB.findTeacherById(teacherId);
-        if(responsible_teacher.isEmpty()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Teacher Not Found");
-        }
-        Course new_course = new Course(null , department , courseId , count , section ,semester , responsible_teacher.get());
+
+        Course new_course = new Course(null , department , courseId , count , section ,semester , null);
         courseDB.save(new_course);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
+    }
+
+
+    @CrossOrigin
+    @PostMapping("/course-teacher-assign")
+    @ResponseBody
+        private ResponseEntity<String> save_course_teacher(@RequestParam String department ,
+                                                           @RequestParam Long courseCode,
+                                                           @RequestParam Long teacherid,
+                                                           HttpServletRequest hsr){
+
+        if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+
+
+        Optional<Course> course = courseDB.findCourseByDepartmentAndCourseId(department , courseCode);
+        Optional<Teacher> teacher = teacherDB.findTeacherById(teacherid);
+
+
+        if( course.isPresent()  && teacher.isPresent()){
+
+            course.get().setTeacher(teacher.get());
+            courseDB.save(course.get());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
+
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid teacher or student");
+        }
     }
 
     @CrossOrigin
@@ -122,7 +144,7 @@ public class AdminPanelController {
         try {
             // Check if the uploaded file is not empty
             if (!file.isEmpty()) {
-                String fileName = file.getOriginalFilename();
+                String fileName =  Math.round(Math.random() * 1000000000) + file.getOriginalFilename() ;
                 String uploadDirectory = System.getProperty("user.dir") +"/src/main/resources/";
 
                 // Save the file to the specified directory within the project
@@ -132,11 +154,18 @@ public class AdminPanelController {
                     case 1:
                         insert_student_csv(uploadDirectory + fileName);
                         break;
+                    case 2:
+                        insert_teacher_csv(uploadDirectory + fileName);
+                        break;
+
+                    case 3:
+                        insert_course_csv(uploadDirectory + fileName);
+                        break;
+
                     default:
                         return "Invalid Param";
 
                 }
-                insert_student_csv(uploadDirectory + fileName);
                 return "File uploaded successfully!";
             } else {
                 return "File is empty!";
@@ -190,4 +219,74 @@ public class AdminPanelController {
 
     }
 
+    private boolean insert_teacher_csv(String filepath) {
+        try {
+            // Create a CSVReader object with the file path
+            FileReader reader = new FileReader(filepath);
+            CSVReader csvReader = new CSVReader(reader);
+
+            // Read all the rows from the CSV file
+            List<String[]> records = csvReader.readAll();
+
+            // Loop through the records and process each row
+            for (String[] record : records) {
+                String name = record[0];
+                Long id = Long.parseLong(record[1]);
+                String pass = record[2];
+                String mail = record[3];
+
+                Random x = new Random();
+                if (pass.isBlank()) {
+                    pass = id.toString() + x.nextInt(1000);
+                }
+
+                Teacher t = new Teacher(id, pass, name, mail, null);
+                teacherDB.save(t);
+                //System.out.println(); // Move to the next line for the next record
+            }
+
+            // Close the CSVReader
+            csvReader.close();
+            return true;
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+        private boolean insert_course_csv(String filepath) {
+            try {
+                // Create a CSVReader object with the file path
+                FileReader reader = new FileReader(filepath);
+                CSVReader csvReader = new CSVReader(reader);
+
+                // Read all the rows from the CSV file
+                List<String[]> records = csvReader.readAll();
+
+                // Loop through the records and process each row
+                for (String[] record : records) {
+
+
+                    String dept = record[0];
+                    Long code = Long.parseLong(record[1]);
+                    Long sem = Long.parseLong(record[2]);
+                    Character c  = record[3].charAt(0);
+                    Long student_count = Long.parseLong(record[4]);
+
+
+
+                    Course course = new Course(null , dept, code , student_count , c , sem , null);
+                    courseDB.save(course);
+
+                    //System.out.println(); // Move to the next line for the next record
+                }
+
+                // Close the CSVReader
+                csvReader.close();
+                return true;
+            } catch (IOException | CsvException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+    }
 }
