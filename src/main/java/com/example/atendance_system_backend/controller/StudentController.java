@@ -1,5 +1,7 @@
 package com.example.atendance_system_backend.controller;
 
+import com.example.atendance_system_backend.department.Department;
+import com.example.atendance_system_backend.department.DepartmentRepository;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
@@ -14,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -31,7 +35,8 @@ public class StudentController {
     @Autowired
     ObjectMapper mapper;
 
-
+    @Autowired
+    DepartmentRepository departmentDB;
 
     @GetMapping("/info")
     @ResponseBody
@@ -52,6 +57,22 @@ public class StudentController {
 
     }
 
+    @CrossOrigin
+    @GetMapping("/departments")
+    @ResponseBody
+    private ResponseEntity<List<String>> get_depts(HttpServletRequest hsr){
+
+        //if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        List<Department> all_depts = departmentDB.findAll();
+        List<String> dept_names = new ArrayList<String>();
+
+        for(int i = 0 ; i < all_depts.size() ; i++){
+            dept_names.add(all_depts.get(i).getName());
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(dept_names);
+    }
+
     public  boolean check_session(HttpServletRequest hsr){
 
 
@@ -62,4 +83,8 @@ public class StudentController {
 
         return sess.isPresent() && sess.get().getType().equals("student");
     }
+
+
+
+
 }

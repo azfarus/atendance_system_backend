@@ -10,4 +10,8 @@ public class StudentCourseIdClass implements Serializable {
         this.studentId = studentId;
         this.courseHid = courseHid;
     }
+    public StudentCourseIdClass() {
+        this.studentId = (long)-1;
+        this.courseHid = (long)-1;
+    }
 }

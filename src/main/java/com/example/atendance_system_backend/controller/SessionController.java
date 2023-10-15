@@ -29,7 +29,7 @@ public class SessionController {
         if(check_session(hsr)){
             return ResponseEntity.status(HttpStatus.OK).body(get_session_id(hsr));
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((long)-1);
 
     }
 
