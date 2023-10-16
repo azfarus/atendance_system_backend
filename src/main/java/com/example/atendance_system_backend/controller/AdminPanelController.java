@@ -203,7 +203,10 @@ public class AdminPanelController {
                 String pass = record[3];
                 Long semester = Long.parseLong(record[4]);
                 String dept = record[5];
-
+                Random x = new Random();
+                if (pass.isBlank()) {
+                    pass = id.toString() + x.nextInt(1000);
+                }
                 Student s = new Student(id , name , mail , pass, semester , dept);
                 studentDB.save(s);
                 //System.out.println(); // Move to the next line for the next record
