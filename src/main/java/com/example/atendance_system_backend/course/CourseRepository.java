@@ -1,6 +1,7 @@
 package com.example.atendance_system_backend.course;
 
 
+import com.example.atendance_system_backend.teacher.Teacher;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,9 @@ public interface CourseRepository extends JpaRepository<Course , Long> {
 
     Optional<Course> findCourseByDepartmentAndCourseId(String department , Long courseID);
     List<Course> findCoursesByDepartment(String department);
+
+    List<Course> findCoursesByTeacher(Teacher teacher);
+
+
 
 }

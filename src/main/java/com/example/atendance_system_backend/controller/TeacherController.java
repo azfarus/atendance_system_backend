@@ -1,6 +1,8 @@
 package com.example.atendance_system_backend.controller;
 
 
+import com.example.atendance_system_backend.course.Course;
+import com.example.atendance_system_backend.course.CourseRepository;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.teacher.Teacher;
@@ -14,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -31,6 +35,8 @@ public class TeacherController {
     @Autowired
     ObjectMapper mapper;
 
+    @Autowired
+    CourseRepository courseDB;
 
 
     @GetMapping("/info")
@@ -50,6 +56,32 @@ public class TeacherController {
 
         return ResponseEntity.status(HttpStatus.OK).body(teacher);
 
+    }
+
+    @GetMapping("/sheets")
+    @ResponseBody
+    private ResponseEntity<List<ObjectNode>> get_sheets(@RequestParam Long teacherId){
+
+        Optional<Teacher> reqTeacher = teacherDB.findTeacherById(teacherId);
+
+        if(reqTeacher.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+
+        List<Course> courses = courseDB.findCoursesByTeacher(reqTeacher.get());
+
+        List<ObjectNode> result = new ArrayList<>();
+
+        for( Course x : courses){
+            ObjectNode teacher = mapper.createObjectNode();
+            teacher.put("hid" , x.getHid());
+            teacher.put("coursename" , x.getCourseName());
+            teacher.put("courseid" , x.getCourseId());
+            teacher.put("department" , x.getDepartment());
+            teacher.put("section" , x.getSection().toString());
+
+            result.add(teacher);
+        }
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
     }
 
     public  boolean check_session(HttpServletRequest hsr){
