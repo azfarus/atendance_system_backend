@@ -58,7 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/**").permitAll() // Public resources
                 .antMatchers("/student/**").hasRole("STUDENT") // Requires "USER" role
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/teacher/**").hasRole("TEACHER")// Requires "ADMIN" role
+                .antMatchers("/teacher/**").hasRole("TEACHER")
+                .antMatchers("/attendance/**").hasRole("TEACHER")// Requires "ADMIN" role
                 .anyRequest().authenticated() // Requires authentication for any other request
                 .and()
                 .httpBasic().and().csrf().disable();
