@@ -45,6 +45,7 @@ public class CourseRegistrationController {
 
        for(Course c : courses){
            course_names.add( c.getCourseId());
+           System.out.println(c.getCourseId());
        }
        return ResponseEntity.status(HttpStatus.ACCEPTED).body(course_names);
 
