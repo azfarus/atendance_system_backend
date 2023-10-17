@@ -64,12 +64,13 @@ public class AdminPanelController {
                                                @RequestParam Long courseId ,
                                                @RequestParam Long count ,
                                                @RequestParam Character section ,
-                                               @RequestParam Long semester , HttpServletRequest hsr){
+                                               @RequestParam Long semester ,
+                                               @RequestParam String courseName , HttpServletRequest hsr){
 
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
 
-        Course new_course = new Course(null , department , courseId , count , section ,semester , null);
+        Course new_course = new Course(null , department , courseId , count , section ,semester ,courseName, null);
         courseDB.save(new_course);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
     }
@@ -271,10 +272,11 @@ public class AdminPanelController {
                     Long sem = Long.parseLong(record[2]);
                     Character c  = record[3].charAt(0);
                     Long student_count = Long.parseLong(record[4]);
+                    String courseName = record[5];
 
 
 
-                    Course course = new Course(null , dept, code , student_count , c , sem , null);
+                    Course course = new Course(null , dept, code , student_count , c , sem ,courseName , null);
                     courseDB.save(course);
 
                     //System.out.println(); // Move to the next line for the next record
