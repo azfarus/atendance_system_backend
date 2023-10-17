@@ -17,4 +17,6 @@ import javax.persistence.Id;
 public class Attendance {
     @Id
     private Long id;
+
+
 }

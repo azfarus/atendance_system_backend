@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin
@@ -63,6 +64,15 @@ public class AttendanceController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(res_student);
+    }
+
+    @PostMapping("/submit-attendance")
+    @ResponseBody
+    private ResponseEntity<String> submit_attendance(@RequestBody Map<String , String> attendanceMap){
+        for(Map.Entry<String,String> x : attendanceMap.entrySet()){
+            System.out.println(x.getKey() + " : " + x.getValue());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("HEHE");
     }
 
 
