@@ -2,6 +2,8 @@ package com.example.atendance_system_backend.controller;
 
 import com.example.atendance_system_backend.department.Department;
 import com.example.atendance_system_backend.department.DepartmentRepository;
+import com.example.atendance_system_backend.file.File;
+import com.example.atendance_system_backend.file.FileStorageService;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
@@ -11,11 +13,14 @@ import com.example.atendance_system_backend.teacher.TeacherRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +42,9 @@ public class StudentController {
 
     @Autowired
     DepartmentRepository departmentDB;
+
+    @Autowired
+    FileStorageService fileStorageService;
 
     @GetMapping("/info")
     @ResponseBody
@@ -71,6 +79,67 @@ public class StudentController {
         }
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(dept_names);
+    }
+
+
+    @CrossOrigin
+    @PostMapping("/upload-photo/{studid}")
+    @ResponseBody
+    private ResponseEntity<Long> upload_photo(@RequestParam MultipartFile file , @PathVariable Long studid ) throws IOException {
+
+        Long fileid = fileStorageService.store(file);
+
+        if(fileid < 0 )return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        Optional<Student> s = studentDB.findStudentById(studid);
+
+        if(s.isEmpty())return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        s.get().setFileId(fileid);
+
+        studentDB.save(s.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body(fileid);
+
+
+    }
+
+    @CrossOrigin
+    @GetMapping("/get-photo/{studid}")
+    @ResponseBody
+    private ResponseEntity<byte[]> get_photo( @PathVariable Long studid ) throws IOException {
+
+        Optional<Student> s = studentDB.findStudentById(studid);
+
+        if(s.isEmpty()) ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        File fileDB = fileStorageService.getFile(s.get().getFileId());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getFilename() + "\"")
+                .body(fileDB.getData());
+
+
+    }
+
+    @CrossOrigin
+    @PostMapping("/update-data/{studid}")
+    @ResponseBody
+    private ResponseEntity<String> update_data( @PathVariable Long studid , @RequestParam Long phonenumber , @RequestParam String email , @RequestParam String address )  {
+
+
+        Optional<Student> s = studentDB.findStudentById(studid);
+
+        if(s.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        s.get().setPhoneNumber(phonenumber);
+        s.get().setAddress(address);
+        s.get().setMail(email);
+
+        studentDB.save(s.get());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+
+
     }
 
     public  boolean check_session(HttpServletRequest hsr){

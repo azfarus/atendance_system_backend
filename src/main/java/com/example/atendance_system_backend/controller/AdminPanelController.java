@@ -4,6 +4,7 @@ import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
 import com.example.atendance_system_backend.department.Department;
 import com.example.atendance_system_backend.department.DepartmentRepository;
+import com.example.atendance_system_backend.file.FileStorageService;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
@@ -43,6 +44,8 @@ public class AdminPanelController {
 
     @Autowired
     MySessionRepository sessionDB;
+
+
     @CrossOrigin
     @PostMapping("/teacher")
     @ResponseBody
@@ -117,7 +120,7 @@ public class AdminPanelController {
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
 
-        Student new_student = new Student(id , name , email , password , semester , department);
+        Student new_student = new Student(id , name , email , password , semester , department , null , null , null);
         studentDB.save(new_student);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
     }
@@ -208,7 +211,7 @@ public class AdminPanelController {
                 if (pass.isBlank()) {
                     pass = id.toString() + x.nextInt(1000);
                 }
-                Student s = new Student(id , name , mail , pass, semester , dept);
+                Student s = new Student(id , name , mail , pass, semester , dept , null , null , null);
                 studentDB.save(s);
                 //System.out.println(); // Move to the next line for the next record
             }

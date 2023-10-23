@@ -28,4 +28,10 @@ public class Student {
 
     private  String department;
 
+    private Long fileId;
+
+    private  Long phoneNumber;
+
+    private String address;
+
 }

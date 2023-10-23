@@ -101,24 +101,20 @@ public class AttendanceController {
         if(!courseDB.existsById(hid)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         List<StudentTakesCourse> studentids = courseregDB.findAllByCourseHid(hid);
-
         if(studentids.size() <= 0) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         ObjectNode attendanceofstudents = mapper.createObjectNode();
-
         ArrayNode startinfo = mapper.createArrayNode(); // array of dates
 
-        List<Attendance> studentlist = attendanceDB.findAttendanceByStudentId(studentids.get(0).getStudentId());
-
+        List<Attendance> studentlist = attendanceDB.findAttendanceByStudentIdAndCourseHid(studentids.get(0).getStudentId() , hid );
         startinfo.add("Name");
         for(Attendance a : studentlist){
-            startinfo.add(a.getDate().format(DateTimeFormatter.ofPattern("dd-MM-YYYY")).toString());
+            startinfo.add(a.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
-
-        attendanceofstudents.put("start" , startinfo);
+        attendanceofstudents.set("start" , startinfo);
 
         for(StudentTakesCourse x : studentids){
-            studentlist = attendanceDB.findAttendanceByStudentId(x.getStudentId()); // attendances from the attendancedb
+            studentlist = attendanceDB.findAttendanceByStudentIdAndCourseHid(x.getStudentId() , hid); // attendances from the attendancedb
             Optional<Student> s = studentDB.findStudentById(x.getStudentId()); // to get the student name
 
 
@@ -134,7 +130,7 @@ public class AttendanceController {
                 info.add(y.getStatus());
             }
 
-            attendanceofstudents.put(x.getStudentId().toString()  , info );
+            attendanceofstudents.set(x.getStudentId().toString()  , info );
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(attendanceofstudents);
