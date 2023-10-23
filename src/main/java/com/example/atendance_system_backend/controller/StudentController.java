@@ -104,6 +104,25 @@ public class StudentController {
 
     }
 
+    private boolean upload_photo_func( MultipartFile file ,  Long studid ) throws IOException {
+
+        Long fileid = fileStorageService.store(file);
+
+        if(fileid < 0 )return false;
+
+        Optional<Student> s = studentDB.findStudentById(studid);
+
+        if(s.isEmpty())return false;
+
+        s.get().setFileId(fileid);
+
+        studentDB.save(s.get());
+
+        return true;
+
+
+    }
+
     @CrossOrigin
     @GetMapping("/get-photo/{studid}")
     @ResponseBody
@@ -125,12 +144,14 @@ public class StudentController {
     @CrossOrigin
     @PostMapping("/update-data/{studid}")
     @ResponseBody
-    private ResponseEntity<String> update_data( @PathVariable Long studid , @RequestParam Long phonenumber , @RequestParam String email , @RequestParam String address )  {
+    private ResponseEntity<String> update_data( @PathVariable Long studid , @RequestParam Long phonenumber , @RequestParam String email , @RequestParam String address , @RequestParam MultipartFile file) throws IOException {
 
 
         Optional<Student> s = studentDB.findStudentById(studid);
 
         if(s.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        if(!upload_photo_func(file , studid)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         s.get().setPhoneNumber(phonenumber);
         s.get().setAddress(address);
