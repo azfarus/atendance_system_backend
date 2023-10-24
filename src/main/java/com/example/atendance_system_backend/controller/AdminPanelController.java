@@ -55,7 +55,7 @@ public class AdminPanelController {
                                                 @RequestParam String email , HttpServletRequest hsr){
 
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-        Teacher new_teacher = new Teacher(id , password , name , email , null);
+        Teacher new_teacher = new Teacher(id , password , name , email , null , null);
         teacherDB.save(new_teacher);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
     }
@@ -247,7 +247,7 @@ public class AdminPanelController {
                     pass = id.toString() + x.nextInt(1000);
                 }
 
-                Teacher t = new Teacher(id, pass, name, mail, null);
+                Teacher t = new Teacher(id, pass, name, mail, null , null);
                 teacherDB.save(t);
                 //System.out.println(); // Move to the next line for the next record
             }

@@ -3,19 +3,25 @@ package com.example.atendance_system_backend.controller;
 
 import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
+import com.example.atendance_system_backend.file.File;
+import com.example.atendance_system_backend.file.FileStorageService;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
+import com.example.atendance_system_backend.student.Student;
 import com.example.atendance_system_backend.teacher.Teacher;
 import com.example.atendance_system_backend.teacher.TeacherRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +44,8 @@ public class TeacherController {
     @Autowired
     CourseRepository courseDB;
 
+    @Autowired
+    FileStorageService fileStorageService;
 
     @GetMapping("/info")
     @ResponseBody
@@ -84,6 +92,46 @@ public class TeacherController {
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
     }
 
+    @CrossOrigin
+    @PostMapping("/upload-photo/{teachid}")
+    @ResponseBody
+    private ResponseEntity<Long> upload_photo(@RequestParam MultipartFile file , @PathVariable Long teachid ) throws IOException {
+
+        Long fileid = fileStorageService.store(file);
+
+        if(fileid < 0 )return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        Optional<Teacher> t = teacherDB.findTeacherById(teachid);
+
+        if(t.isEmpty())return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        t.get().setFileId(fileid);
+
+        teacherDB.save(t.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body(fileid);
+
+
+    }
+
+
+    @CrossOrigin
+    @GetMapping("/get-photo/{teachid}")
+    @ResponseBody
+    private ResponseEntity<byte[]> get_photo( @PathVariable Long teachid ) throws IOException {
+
+        Optional<Teacher> s = teacherDB.findTeacherById(teachid);
+
+        if(s.isEmpty()) ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        File fileDB = fileStorageService.getFile(s.get().getFileId());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getFilename() + "\"")
+                .body(fileDB.getData());
+
+
+    }
     public  boolean check_session(HttpServletRequest hsr){
 
 

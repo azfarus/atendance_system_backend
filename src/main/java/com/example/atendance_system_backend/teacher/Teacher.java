@@ -30,6 +30,7 @@ public class Teacher {
     @OneToMany(mappedBy = "teacher")
     private Set<Course> course;
 
+    private Long fileId;
 
 
 }
