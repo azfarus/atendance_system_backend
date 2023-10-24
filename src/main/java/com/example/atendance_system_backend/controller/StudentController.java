@@ -163,6 +163,52 @@ public class StudentController {
 
     }
 
+    @CrossOrigin
+    @GetMapping("/get-student-data/{studid}")
+    @ResponseBody
+    private ResponseEntity<StudentDataResponse> getStudentData(@PathVariable Long studid) {
+        Optional<Student> studentOptional = studentDB.findStudentById(studid);
+
+        if (studentOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Student student = studentOptional.get();
+        StudentDataResponse studentDataResponse = new StudentDataResponse(
+                student.getPhoneNumber(),
+                student.getMail(),
+                student.getAddress()
+        );
+
+        return ResponseEntity.ok(studentDataResponse);
+    }
+
+    // Define a response class to send the required student data
+    private static class StudentDataResponse {
+        private final Long phoneNumber;
+        private final String email;
+        private final String address;
+
+        public StudentDataResponse(Long phoneNumber, String email, String address) {
+            this.phoneNumber = phoneNumber;
+            this.email = email;
+            this.address = address;
+        }
+
+        public Long getPhoneNumber() {
+            return phoneNumber;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+    }
+
+
     public  boolean check_session(HttpServletRequest hsr){
 
 
