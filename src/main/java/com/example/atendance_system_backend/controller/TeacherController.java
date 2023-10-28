@@ -3,6 +3,8 @@ package com.example.atendance_system_backend.controller;
 
 import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
+import com.example.atendance_system_backend.department.Department;
+import com.example.atendance_system_backend.department.DepartmentRepository;
 import com.example.atendance_system_backend.file.File;
 import com.example.atendance_system_backend.file.FileStorageService;
 import com.example.atendance_system_backend.session.MySession;
@@ -46,6 +48,10 @@ public class TeacherController {
 
     @Autowired
     FileStorageService fileStorageService;
+
+
+    @Autowired
+    DepartmentRepository departmentDB;
 
     @GetMapping("/info")
     @ResponseBody
@@ -112,6 +118,22 @@ public class TeacherController {
         return ResponseEntity.status(HttpStatus.OK).body(fileid);
 
 
+    }
+
+    @CrossOrigin
+    @GetMapping("/departments")
+    @ResponseBody
+    private ResponseEntity<List<String>> get_depts(HttpServletRequest hsr){
+
+        //if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        List<Department> all_depts = departmentDB.findAll();
+        List<String> dept_names = new ArrayList<String>();
+
+        for(int i = 0 ; i < all_depts.size() ; i++){
+            dept_names.add(all_depts.get(i).getName());
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(dept_names);
     }
 
 
