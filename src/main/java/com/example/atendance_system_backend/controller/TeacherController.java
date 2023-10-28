@@ -72,6 +72,33 @@ public class TeacherController {
 
     }
 
+
+    @CrossOrigin
+    @PostMapping("/course-teacher-assign")
+    @ResponseBody
+    private ResponseEntity<String> save_course_teacher(@RequestParam String department ,
+                                                       @RequestParam Long courseCode,
+                                                       @RequestParam Long teacherid,
+                                                       @RequestParam String section,
+                                                       HttpServletRequest hsr){
+
+        System.out.println(section.charAt(0));
+        Optional<Course> course = courseDB.findCourseByDepartmentAndCourseIdAndSection(department , courseCode , Character.toUpperCase(section.charAt(0)));
+        Optional<Teacher> teacher = teacherDB.findTeacherById(teacherid);
+
+
+        if( course.isPresent()  && teacher.isPresent()){
+
+            course.get().setTeacher(teacher.get());
+            courseDB.save(course.get());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
+
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid teacher or student");
+        }
+    }
+
     @GetMapping("/sheets")
     @ResponseBody
     private ResponseEntity<List<ObjectNode>> get_sheets(@RequestParam Long teacherId){
