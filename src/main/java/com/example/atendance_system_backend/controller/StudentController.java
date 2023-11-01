@@ -1,5 +1,7 @@
 package com.example.atendance_system_backend.controller;
 
+import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
+import com.example.atendance_system_backend.coursereg.StudentTakesCourseRepository;
 import com.example.atendance_system_backend.department.Department;
 import com.example.atendance_system_backend.department.DepartmentRepository;
 import com.example.atendance_system_backend.file.File;
@@ -44,6 +46,9 @@ public class StudentController {
     DepartmentRepository departmentDB;
 
     @Autowired
+    StudentTakesCourseRepository courseregDB;
+
+    @Autowired
     FileStorageService fileStorageService;
 
     @GetMapping("/info")
@@ -79,6 +84,20 @@ public class StudentController {
         }
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(dept_names);
+    }
+
+    @CrossOrigin
+    @GetMapping("/courses/{sid}")
+    @ResponseBody
+    private ResponseEntity<List<Long>> get_courses(@PathVariable Long sid){
+
+        List<StudentTakesCourse> hids = courseregDB.findByStudentId(sid);
+        List<Long> result = new ArrayList<>();
+
+        for(StudentTakesCourse x : hids){
+            result.add(x.getCourseHid());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
