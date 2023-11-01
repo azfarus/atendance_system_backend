@@ -145,7 +145,9 @@ public class AttendanceController {
 
 
         if(tot == 0 ) return (double)-1;
-        return (present/tot);
+        return Math.round((present / tot) * 1000.0) / 1000.0;
+
+
 
     }
 
