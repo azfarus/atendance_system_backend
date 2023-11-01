@@ -123,6 +123,7 @@ public class StudentController {
             courseObj.put("hid" , x.getHid());
             courseObj.put("courseid" , x.getCourseId());
             courseObj.put("department" , x.getDepartment());
+            courseObj.put("courseName" , x.getCourseName());
 
             courseInfoList.add(courseObj);
         }
