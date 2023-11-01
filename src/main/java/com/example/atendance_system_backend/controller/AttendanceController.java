@@ -122,6 +122,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/get-percentage/{hid}/{sid}")
+    @ResponseBody
     private ResponseEntity<Double> get_percentage(@PathVariable Long hid , @PathVariable Long sid){
 
         return ResponseEntity.status(HttpStatus.OK).body(get_percentage_func(hid , sid));
@@ -136,7 +137,7 @@ public class AttendanceController {
         double present = 0;
 
         for (Attendance x : attendanceListofStudentId){
-            if(x.getStatus().equals("P")){
+            if (x.getStatus().equals("P") || x.getStatus().equals("L")){
                 present+=1;
             }
             tot+=1;

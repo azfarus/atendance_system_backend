@@ -1,5 +1,6 @@
 package com.example.atendance_system_backend.controller;
 
+import com.example.atendance_system_backend.attendance.Attendance;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourseRepository;
 import com.example.atendance_system_backend.department.Department;
@@ -10,6 +11,10 @@ import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
 import com.example.atendance_system_backend.student.StudentRepository;
+import com.example.atendance_system_backend.course.Course;
+import com.example.atendance_system_backend.course.CourseRepository;
+import com.example.atendance_system_backend.attendance.Attendance;
+import com.example.atendance_system_backend.attendance.AttendanceRepository;
 import com.example.atendance_system_backend.teacher.Teacher;
 import com.example.atendance_system_backend.teacher.TeacherRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,10 +51,16 @@ public class StudentController {
     DepartmentRepository departmentDB;
 
     @Autowired
+    CourseRepository courseDB;
+
+    @Autowired
     StudentTakesCourseRepository courseregDB;
 
     @Autowired
     FileStorageService fileStorageService;
+
+    @Autowired
+    AttendanceRepository attendanceDB;
 
     @GetMapping("/info")
     @ResponseBody
@@ -100,6 +111,24 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @CrossOrigin
+    @GetMapping("/courses_info")
+    @ResponseBody
+    public ResponseEntity<List<ObjectNode>> getCourses() {
+        List<Course> courses = courseDB.findAll();
+        List<ObjectNode> courseInfoList = new ArrayList<>();
+
+        for( Course x : courses){
+            ObjectNode courseObj = mapper.createObjectNode();
+            courseObj.put("hid" , x.getHid());
+            courseObj.put("courseid" , x.getCourseId());
+            courseObj.put("department" , x.getDepartment());
+
+            courseInfoList.add(courseObj);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(courseInfoList);
+    }
 
     @CrossOrigin
     @PostMapping("/upload-photo/{studid}")
@@ -179,6 +208,34 @@ public class StudentController {
         studentDB.save(s.get());
         return ResponseEntity.status(HttpStatus.OK).body(null);
 
+
+    }
+
+    @GetMapping("/get-percentage/{hid}/{sid}")
+    @ResponseBody
+    private ResponseEntity<Double> get_percentage(@PathVariable Long hid , @PathVariable Long sid){
+
+        return ResponseEntity.status(HttpStatus.OK).body(get_percentage_func(hid , sid));
+
+
+    }
+
+    private Double get_percentage_func(Long hid , Long sid){
+        List<Attendance> attendanceListofStudentId = attendanceDB.findAttendanceByStudentIdAndCourseHid(sid , hid);
+
+        double tot=0;
+        double present = 0;
+
+        for (Attendance x : attendanceListofStudentId){
+            if(x.getStatus().equals("P")){
+                present+=1;
+            }
+            tot+=1;
+        }
+
+
+        if(tot == 0 ) return (double)-1;
+        return (present/tot);
 
     }
 
