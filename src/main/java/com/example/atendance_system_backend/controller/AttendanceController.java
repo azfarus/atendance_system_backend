@@ -93,6 +93,61 @@ public class AttendanceController {
         return ResponseEntity.status(HttpStatus.OK).body("HEHE");
     }
 
+    @PostMapping("/send-warning")
+    @ResponseBody
+    private ResponseEntity<String> warning_sender(@RequestBody List<Long> defaulters){
+        for(Long x : defaulters){
+            System.out.println(x);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Succees");
+    }
+
+
+    @GetMapping("/get-defaulters/{hid}")
+    @ResponseBody
+    private ResponseEntity<List<Long>> get_defaulters( @PathVariable Long hid){
+
+        if(!courseDB.existsById(hid)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        List<StudentTakesCourse> studentsInCourse = courseregDB.findAllByCourseHid(hid);
+        List<Long> defaulters = new ArrayList<>();
+        for(StudentTakesCourse k :  studentsInCourse){
+            Double percentVal = get_percentage_func(hid , k.getStudentId());
+            if( percentVal>= 0 && percentVal <= 0.85 )defaulters.add(k.getStudentId());
+            System.out.println("ID "+ k.getStudentId() +" Percentage "+percentVal);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(defaulters);
+
+    }
+
+    @GetMapping("/get-percentage/{hid}/{sid}")
+    private ResponseEntity<Double> get_percentage(@PathVariable Long hid , @PathVariable Long sid){
+
+        return ResponseEntity.status(HttpStatus.OK).body(get_percentage_func(hid , sid));
+
+
+    }
+
+    private Double get_percentage_func(Long hid , Long sid){
+        List<Attendance> attendanceListofStudentId = attendanceDB.findAttendanceByStudentIdAndCourseHid(sid , hid);
+
+        double tot=0;
+        double present = 0;
+
+        for (Attendance x : attendanceListofStudentId){
+            if(x.getStatus().equals("P")){
+                present+=1;
+            }
+            tot+=1;
+        }
+
+
+        if(tot == 0 ) return (double)-1;
+        return (present/tot);
+
+    }
+
 
     @GetMapping("/prev-attendance/{hid}")
     @ResponseBody
@@ -108,6 +163,7 @@ public class AttendanceController {
 
         List<Attendance> studentlist = attendanceDB.findAttendanceByStudentIdAndCourseHid(studentids.get(0).getStudentId() , hid );
         startinfo.add("Name");
+        startinfo.add("Percentage");
         for(Attendance a : studentlist){
             startinfo.add(a.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
@@ -123,8 +179,7 @@ public class AttendanceController {
             ArrayNode info = mapper.createArrayNode(); // array of P A L
 
             info.add(s.get().getName());
-
-
+            info.add(get_percentage_func(hid , x.getStudentId())*100 + "%");
 
             for(Attendance y : studentlist){
                 info.add(y.getStatus());

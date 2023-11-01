@@ -4,6 +4,7 @@ import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
 import com.example.atendance_system_backend.department.Department;
 import com.example.atendance_system_backend.department.DepartmentRepository;
+import com.example.atendance_system_backend.email.GmailEmailSender;
 import com.example.atendance_system_backend.file.FileStorageService;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
@@ -44,6 +45,9 @@ public class AdminPanelController {
 
     @Autowired
     MySessionRepository sessionDB;
+
+    @Autowired
+    GmailEmailSender mailsender;
 
 
     @CrossOrigin
@@ -212,6 +216,10 @@ public class AdminPanelController {
                 if (pass.isBlank()) {
                     pass = id.toString() + x.nextInt(1000);
                 }
+                if(mailsender.emailValidityChecker(mail)){
+                    String mailbody = "You have been registered as a student.\nID: "+id+"\nPassword: "+pass;
+                    mailsender.sendEmail(mail,"Registration Successful!" , mailbody);
+                }
                 Student s = new Student(id , name , mail , pass, semester , dept , null , null , null);
                 studentDB.save(s);
                 //System.out.println(); // Move to the next line for the next record
@@ -222,8 +230,11 @@ public class AdminPanelController {
             return true;
         } catch (IOException | CsvException e) {
             e.printStackTrace();
-            return false;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+        return false;
 
     }
 
@@ -248,6 +259,11 @@ public class AdminPanelController {
                     pass = id.toString() + x.nextInt(1000);
                 }
 
+                if(mailsender.emailValidityChecker(mail)){
+                    String mailbody = "You have been registered as a teacher.\nID: "+id+"\nPassword: "+pass;
+                    mailsender.sendEmail(mail , "Registration done" ,mailbody );
+                }
+
                 Teacher t = new Teacher(id, pass, name, mail, null , null);
                 teacherDB.save(t);
                 //System.out.println(); // Move to the next line for the next record
@@ -258,8 +274,10 @@ public class AdminPanelController {
             return true;
         } catch (IOException | CsvException e) {
             e.printStackTrace();
-            return false;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+        return false;
     }
         private boolean insert_course_csv(String filepath) {
             try {

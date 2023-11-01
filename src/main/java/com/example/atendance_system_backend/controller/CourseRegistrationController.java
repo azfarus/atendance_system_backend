@@ -5,8 +5,11 @@ import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourseRepository;
+import com.example.atendance_system_backend.email.GmailEmailSender;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
+import com.example.atendance_system_backend.student.Student;
+import com.example.atendance_system_backend.student.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,12 @@ public class CourseRegistrationController {
 
     @Autowired
     MySessionRepository sessionDB;
+
+    @Autowired
+    StudentRepository studentDB;
+
+    @Autowired
+    GmailEmailSender gmailEmailSender;
     @GetMapping("/get-course-by-dept")
     @ResponseBody
     private ResponseEntity<List<Long>> get_all_course(@RequestParam String department , HttpServletRequest hsr){
@@ -52,20 +61,35 @@ public class CourseRegistrationController {
 
     @PostMapping("/register")
     @ResponseBody
-    private ResponseEntity<String> register_course(@RequestParam Long stud_id ,@RequestParam String department ,@RequestParam Long course , HttpServletRequest hsr){
+    private ResponseEntity<String> register_course(@RequestParam Long stud_id ,@RequestParam String department ,@RequestParam Long course , HttpServletRequest hsr) throws Exception {
 
         if(!check_session(hsr)) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
-        Optional<Course> reg_course = courseDB.findCourseByDepartmentAndCourseId(department,course);
+        List<Course> reg_course = courseDB.findCourseByDepartmentAndCourseId(department,course);
 
         if(reg_course.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("NO COURSE");
 
+        Optional<Student> s = studentDB.findStudentById(stud_id);
 
-        StudentTakesCourse new_reg = new StudentTakesCourse(stud_id , reg_course.get().getHid());
+        if(s.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid ID");
 
-        regDB.save(new_reg);
+        for(Course x : reg_course){
+            if(x.getCount() > 0){
+                StudentTakesCourse new_reg = new StudentTakesCourse(stud_id , x.getHid());
+                regDB.save(new_reg);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("ok");
+                x.setCount(x.getCount()-1);
+                courseDB.save(x);
+                String mailsubj= "Course registration successful";
+                String mailbody= "You have been registered to:\n" +x.getCourseId()+" "+ x.getCourseName()+"\nSection:"+x.getSection().toString();
+                gmailEmailSender.sendEmail(s.get().getMail() , mailsubj , mailbody);
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body("Registered to "+ x.getCourseName());
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Slots filled");
+
+
 
     }
 

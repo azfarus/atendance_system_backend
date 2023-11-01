@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course , Long> {
 
-    Optional<Course> findCourseByDepartmentAndCourseId(String department , Long courseID);
+    List<Course> findCourseByDepartmentAndCourseId(String department , Long courseID);
 
     Optional<Course> findCourseByDepartmentAndCourseIdAndSection(String department , Long courseID , Character sec);
     List<Course> findCoursesByDepartment(String department);

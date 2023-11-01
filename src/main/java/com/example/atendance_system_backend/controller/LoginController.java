@@ -6,6 +6,9 @@ package com.example.atendance_system_backend.controller;
 
 import com.example.atendance_system_backend.admin.Admin;
 import com.example.atendance_system_backend.admin.AdminRepository;
+import com.example.atendance_system_backend.email.EmailService;
+import com.example.atendance_system_backend.email.GmailEmailSender;
+import com.example.atendance_system_backend.email.GmailService;
 import com.example.atendance_system_backend.hasher.StringHasher;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -41,6 +46,10 @@ public class LoginController {
 
     @Autowired
     MySessionRepository sessionDB;
+
+
+    GmailService gmailService = new GmailService();
+
 
     @CrossOrigin
     @PostMapping("/teacher")
@@ -87,10 +96,14 @@ public class LoginController {
     @CrossOrigin
     @PostMapping("/admin")
     @ResponseBody
-    public  ResponseEntity<String> admin_login(@RequestBody LoginDTO admn_login_dto, HttpServletRequest hsr){
+    public  ResponseEntity<String> admin_login(@RequestBody LoginDTO admn_login_dto, HttpServletRequest hsr) throws Exception {
+
+
+
 
         Optional<Admin> admin = admin_db.findAdminById(admn_login_dto.getId());
         System.out.println("Hello"+ admn_login_dto.getId());
+
 
 
         HttpSession session = hsr.getSession();
