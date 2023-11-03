@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.text.DecimalFormat;
 
 @CrossOrigin
 @RestController
@@ -144,7 +145,7 @@ public class AttendanceController {
         }
 
 
-        if(tot == 0 ) return (double)-1;
+        if(tot == 0 ) return (double)0;
         return Math.round((present / tot) * 1000.0) / 1000.0;
 
 
