@@ -89,6 +89,8 @@ public class TeacherController {
 
         if( course.isPresent()  && teacher.isPresent()){
 
+
+            if(course.get().getTeacher() != null)  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Course already taken");
             course.get().setTeacher(teacher.get());
             courseDB.save(course.get());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");

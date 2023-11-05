@@ -6,6 +6,7 @@ import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourseRepository;
+import com.example.atendance_system_backend.email.GmailEmailSender;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
@@ -16,11 +17,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -50,6 +53,9 @@ public class AttendanceController {
 
     @Autowired
     AttendanceRepository attendanceDB;
+
+    @Autowired
+    GmailEmailSender gmailEmailSender;
 
 
 
@@ -94,11 +100,23 @@ public class AttendanceController {
         return ResponseEntity.status(HttpStatus.OK).body("HEHE");
     }
 
-    @PostMapping("/send-warning")
+    @PostMapping("/send-warning/{hid}")
     @ResponseBody
-    private ResponseEntity<String> warning_sender(@RequestBody List<Long> defaulters){
+    private ResponseEntity<String> warning_sender(@RequestBody List<Long> defaulters, @PathVariable Long hid) throws Exception {
+
+        Optional<Course> c = courseDB.findById(hid);
+
+        if(c.isEmpty() ) return null;
+
+
+        String topic = "Low Attendance Percentage";
+        String message= "Your attendance percentage in your course : "+c.get().getCourseId()+" "+c.get().getCourseName()+" is below 85%.";
+
         for(Long x : defaulters){
             System.out.println(x);
+            Optional<Student> s = studentDB.findStudentById(x);
+            if(s.isEmpty()) continue;
+            gmailEmailSender.sendEmail(s.get().getMail() , topic , message);
         }
         return ResponseEntity.status(HttpStatus.OK).body("Succees");
     }
@@ -168,11 +186,10 @@ public class AttendanceController {
         List<Attendance> studentlist = attendanceDB.findAttendanceByStudentIdAndCourseHid(studentids.get(0).getStudentId() , hid );
         startinfo.add("Name");
         startinfo.add("Percentage");
-        for(Attendance a : studentlist){
-            startinfo.add(a.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        }
-        attendanceofstudents.set("start" , startinfo);
 
+
+        Map<LocalDate , Integer> dateToIndex = new HashMap<>();
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
         for(StudentTakesCourse x : studentids){
             studentlist = attendanceDB.findAttendanceByStudentIdAndCourseHid(x.getStudentId() , hid); // attendances from the attendancedb
             Optional<Student> s = studentDB.findStudentById(x.getStudentId()); // to get the student name
@@ -180,18 +197,41 @@ public class AttendanceController {
 
             Collections.sort(studentlist); // sort according to date
 
-            ArrayNode info = mapper.createArrayNode(); // array of P A L
+            ArrayNode info = mapper.createArrayNode();// array of P A L
+
 
             info.add(s.get().getName());
-            info.add(get_percentage_func(hid , x.getStudentId())*100 + "%");
+            info.add(   decimalFormat.format(get_percentage_func(hid , x.getStudentId())*100 )+ "%");
+
 
             for(Attendance y : studentlist){
-                info.add(y.getStatus());
+
+                if(!dateToIndex.containsKey(y.getDate())){
+                    dateToIndex.put(y.getDate() , dateToIndex.size()+2);
+                }
+                Integer place = dateToIndex.get(y.getDate());
+
+                while(info.size() <= place){
+                    info.add("");
+                }
+                info.insert(place , y.getStatus());
+
+
             }
+
+            System.out.println(info);
+
+
 
             attendanceofstudents.set(x.getStudentId().toString()  , info );
         }
 
+
+        for(Map.Entry<LocalDate , Integer> x : dateToIndex.entrySet() ){
+            startinfo.add(x.getKey().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        }
+
+        attendanceofstudents.set("start" , startinfo);
         return ResponseEntity.status(HttpStatus.OK).body(attendanceofstudents);
     }
 
