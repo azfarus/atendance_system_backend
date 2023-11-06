@@ -214,7 +214,7 @@ public class AttendanceController {
                 while(info.size() <= place){
                     info.add("");
                 }
-                info.insert(place , y.getStatus());
+                info.set(place , y.getStatus());
 
 
             }
