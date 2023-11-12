@@ -214,7 +214,14 @@ public class AttendanceController {
                 while(info.size() <= place){
                     info.add("");
                 }
+
+                while(startinfo.size() <= place){
+                    startinfo.add("");
+                }
+
+                startinfo.set(place,y.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
                 info.set(place , y.getStatus());
+
 
 
             }
@@ -227,9 +234,10 @@ public class AttendanceController {
         }
 
 
-        for(Map.Entry<LocalDate , Integer> x : dateToIndex.entrySet() ){
-            startinfo.add(x.getKey().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        }
+//        for(Map.Entry<LocalDate , Integer> x : dateToIndex.entrySet() ){
+//            startinfo.add(x.getKey().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+//
+//        }
 
         attendanceofstudents.set("start" , startinfo);
         return ResponseEntity.status(HttpStatus.OK).body(attendanceofstudents);
