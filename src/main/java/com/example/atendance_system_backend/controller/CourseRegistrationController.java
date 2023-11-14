@@ -10,6 +10,9 @@ import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
 import com.example.atendance_system_backend.student.StudentRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,17 +46,25 @@ public class CourseRegistrationController {
 
     @Autowired
     GmailEmailSender gmailEmailSender;
+
+    @Autowired
+    ObjectMapper mapper;
+
     @GetMapping("/get-course-by-dept")
     @ResponseBody
-    private ResponseEntity<List<Long>> get_all_course(@RequestParam String department , HttpServletRequest hsr){
+    private ResponseEntity<List<ObjectNode>> get_all_course(@RequestParam String department , HttpServletRequest hsr){
 
         if(!check_session(hsr)) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
         List<Course> courses = courseDB.findCoursesByDepartment(department);
-        List<Long> course_names = new ArrayList<>();
+        List<ObjectNode> course_names = new ArrayList<>();
 
        for(Course c : courses){
-           course_names.add( c.getCourseId());
+
+           ObjectNode courseNode=mapper.createObjectNode();
+           courseNode.put("hid" , c.getHid().toString());
+           courseNode.put("name" ,c.getDepartment()+" "+c.getCourseId().toString()+" "+" "+c.getSection()+" "+ c.getCourseName());
+           if(c.getTeacher() == null )course_names.add(courseNode);
        }
        return ResponseEntity.status(HttpStatus.ACCEPTED).body(course_names);
 

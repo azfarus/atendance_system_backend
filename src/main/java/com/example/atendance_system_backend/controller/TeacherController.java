@@ -76,14 +76,12 @@ public class TeacherController {
     @CrossOrigin
     @PostMapping("/course-teacher-assign")
     @ResponseBody
-    private ResponseEntity<String> save_course_teacher(@RequestParam String department ,
-                                                       @RequestParam Long courseCode,
-                                                       @RequestParam Long teacherid,
-                                                       @RequestParam String section,
+    private ResponseEntity<String> save_course_teacher(@RequestParam Long teacherid,
+                                                       @RequestParam Long hid,
                                                        HttpServletRequest hsr){
 
-        System.out.println(section.charAt(0));
-        Optional<Course> course = courseDB.findCourseByDepartmentAndCourseIdAndSection(department , courseCode , Character.toUpperCase(section.charAt(0)));
+
+        Optional<Course> course = courseDB.findById(hid);
         Optional<Teacher> teacher = teacherDB.findTeacherById(teacherid);
 
 

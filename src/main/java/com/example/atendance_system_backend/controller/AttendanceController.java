@@ -63,7 +63,8 @@ public class AttendanceController {
 
     @GetMapping("/get-students")
     @ResponseBody
-    private ResponseEntity<ObjectNode> get_students(@RequestParam Long hid){
+    private ResponseEntity<ObjectNode> get_students(@RequestParam Long hid ,
+                                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate attendanceDate){
 
         List<StudentTakesCourse> studentids = courseregDB.findAllByCourseHid(hid);
 
@@ -75,7 +76,15 @@ public class AttendanceController {
 
 
 
-            res_student.put(s.get().getId().toString() , s.get().getName() );
+            Optional<Attendance> prev_attendance_status = attendanceDB.findAttendanceByStudentIdAndCourseHidAndDate(x.getStudentId() , hid , attendanceDate);
+            ObjectNode student_deets= mapper.createObjectNode();
+            student_deets.put("name" , s.get().getName());
+            student_deets.put("status", "P");
+            prev_attendance_status.ifPresent(attendance -> student_deets.put("status", attendance.getStatus()));
+
+
+
+            res_student.set(s.get().getId().toString() , student_deets );
 
 
         }
@@ -133,9 +142,12 @@ public class AttendanceController {
     }
 
 
-    @GetMapping("/get-defaulters/{hid}")
+    @GetMapping("/get-defaulters/{hid}/{percentage}")
     @ResponseBody
-    private ResponseEntity<List<Long>> get_defaulters( @PathVariable Long hid){
+    private ResponseEntity<List<Long>> get_defaulters( @PathVariable Long hid , @PathVariable Double percentage){
+
+        percentage/=100.0;
+
 
         if(!courseDB.existsById(hid)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
@@ -143,7 +155,7 @@ public class AttendanceController {
         List<Long> defaulters = new ArrayList<>();
         for(StudentTakesCourse k :  studentsInCourse){
             Double percentVal = get_percentage_func(hid , k.getStudentId());
-            if( percentVal>= 0 && percentVal <= 0.85 )defaulters.add(k.getStudentId());
+            if( percentVal>= 0 && percentVal <= percentage )defaulters.add(k.getStudentId());
             System.out.println("ID "+ k.getStudentId() +" Percentage "+percentVal);
         }
 
@@ -245,10 +257,7 @@ public class AttendanceController {
         }
 
 
-//        for(Map.Entry<LocalDate , Integer> x : dateToIndex.entrySet() ){
-//            startinfo.add(x.getKey().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-//
-//        }
+
 
         attendanceofstudents.set("start" , startinfo);
         return ResponseEntity.status(HttpStatus.OK).body(attendanceofstudents);
