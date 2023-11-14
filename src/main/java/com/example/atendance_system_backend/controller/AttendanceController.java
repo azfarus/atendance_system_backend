@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -85,20 +86,30 @@ public class AttendanceController {
 
     @PostMapping("/submit-attendance/{hid}")
     @ResponseBody
-    private ResponseEntity<String> submit_attendance(@RequestBody Map<String , String> attendanceMap , @PathVariable Long hid){
-
-        if(!courseDB.existsById(hid)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("eheh");
-
-        LocalDate d = LocalDate.now();
+    private ResponseEntity<String> submit_attendance(
+            @RequestBody Map<String, String> attendanceMap,
+            @PathVariable Long hid,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate attendanceDate
+    ) {
+        if (!courseDB.existsById(hid)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Course not found");
+        }
 
         System.out.println(hid);
-        for(Map.Entry<String,String> x : attendanceMap.entrySet()){
-            System.out.println(x.getKey() + " : " + x.getValue());
-            Attendance atd = new Attendance(Long.parseLong(x.getKey()) , d , x.getValue() , hid);
+        for (Map.Entry<String, String> entry : attendanceMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+            Attendance atd = new Attendance(
+                    Long.parseLong(entry.getKey()),
+                    attendanceDate,
+                    entry.getValue(),
+                    hid
+            );
             attendanceDB.save(atd);
         }
-        return ResponseEntity.status(HttpStatus.OK).body("HEHE");
+
+        return ResponseEntity.status(HttpStatus.OK).body("Attendance submitted successfully");
     }
+
 
     @PostMapping("/send-warning/{hid}")
     @ResponseBody
