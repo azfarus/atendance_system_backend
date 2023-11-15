@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import javax.persistence.Entity;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 public interface CourseRepository extends JpaRepository<Course , Long> {
@@ -19,7 +20,9 @@ public interface CourseRepository extends JpaRepository<Course , Long> {
     Optional<Course> findCourseByDepartmentAndCourseIdAndSection(String department , Long courseID , Character sec);
     List<Course> findCoursesByDepartment(String department);
 
-    List<Course> findCoursesByTeacher(Teacher teacher);
+    List<Course> findCoursesByTeacherContains(Teacher teacher);
+
+
 
 
 }

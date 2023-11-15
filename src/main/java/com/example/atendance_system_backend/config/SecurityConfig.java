@@ -39,31 +39,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AdminRepository adminDB;
+
+    @Autowired
+    UserDetailsServiceImpl usdeetservimpl;
     @Bean
     public PasswordEncoder passwordEncoder() {
         // Use BCryptPasswordEncoder for password hashing
         return new BCryptPasswordEncoder();
     }
 
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//                .userDetailsService(userDetailsService())
+//                .passwordEncoder(passwordEncoder());
+//    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService())
-                .passwordEncoder(passwordEncoder());
+        auth.userDetailsService(usdeetservimpl).passwordEncoder(passwordEncoder());
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers("/login/**").permitAll()
+                .antMatchers("/forgotpass/**").permitAll()
                 .antMatchers("/student/get-photo/**").permitAll()// Public resources
                 .antMatchers("/teacher/get-photo/**").permitAll()// Public resources
-                .antMatchers("/student/**").hasRole("STUDENT") // Requires "USER" role
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/teacher/**").hasRole("TEACHER")
-                .antMatchers("/attendance/**").hasRole("TEACHER")// Requires "ADMIN" role
+                .antMatchers("/student/**").hasAuthority("STUDENT") // Requires "USER" role
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/teacher/**").hasAuthority("TEACHER")
+                .antMatchers("/attendance/**").hasAuthority("TEACHER")// Requires "ADMIN" role
                 .antMatchers("/attendance/get-percentage/**").permitAll()
-                .antMatchers("/file/**").hasAnyRole("TEACHER","STUDENT")
+                .antMatchers("/file/**").hasAnyAuthority("TEACHER","STUDENT")
                 .anyRequest().authenticated() // Requires authentication for any other request
                 .and()
                 .httpBasic().and().csrf().disable();
@@ -88,54 +98,54 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-
-        List<UserDetails> allusers = new ArrayList<>();
-        List<Student> students = studentDB.findAll();
-
-        for(Student x : students){
-
-            UserDetails user = User.builder()
-                    .username(x.getId().toString())
-                    .password(passwordEncoder().encode(x.getPassword())) // Encode the password
-                    .roles("STUDENT")
-                    .build();
-
-            allusers.add(user);
-
-        }
-
-        List<Teacher> teachers = teacherDB.findAll();
-
-        for(Teacher x : teachers){
-
-            UserDetails user = User.builder()
-                    .username(x.getId().toString())
-                    .password(passwordEncoder().encode(x.getPassword())) // Encode the password
-                    .roles("TEACHER")
-                    .build();
-
-            allusers.add(user);
-
-        }
-
-        List<Admin> admins = adminDB.findAll();
-
-        for(Admin x : admins){
-
-            UserDetails user = User.builder()
-                    .username(x.getId().toString())
-                    .password(passwordEncoder().encode(x.getPassword())) // Encode the password
-                    .roles("ADMIN")
-                    .build();
-
-            allusers.add(user);
-
-        }
-
-
-
-        return new InMemoryUserDetailsManager(allusers);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//
+//        List<UserDetails> allusers = new ArrayList<>();
+//        List<Student> students = studentDB.findAll();
+//
+//        for(Student x : students){
+//
+//            UserDetails user = User.builder()
+//                    .username(x.getId().toString())
+//                    .password(passwordEncoder().encode(x.getPassword())) // Encode the password
+//                    .roles("STUDENT")
+//                    .build();
+//
+//            allusers.add(user);
+//
+//        }
+//
+//        List<Teacher> teachers = teacherDB.findAll();
+//
+//        for(Teacher x : teachers){
+//
+//            UserDetails user = User.builder()
+//                    .username(x.getId().toString())
+//                    .password(passwordEncoder().encode(x.getPassword())) // Encode the password
+//                    .roles("TEACHER")
+//                    .build();
+//
+//            allusers.add(user);
+//
+//        }
+//
+//        List<Admin> admins = adminDB.findAll();
+//
+//        for(Admin x : admins){
+//
+//            UserDetails user = User.builder()
+//                    .username(x.getId().toString())
+//                    .password(passwordEncoder().encode(x.getPassword())) // Encode the password
+//                    .roles("ADMIN")
+//                    .build();
+//
+//            allusers.add(user);
+//
+//        }
+//
+//
+//
+//        return new InMemoryUserDetailsManager(allusers);
+//    }
 }

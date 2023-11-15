@@ -31,9 +31,9 @@ public class Course {
     private Long semester;
 
     private String courseName;
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(nullable = true)
-    private Teacher teacher;
+    private Set<Teacher> teacher;
 
 
 }

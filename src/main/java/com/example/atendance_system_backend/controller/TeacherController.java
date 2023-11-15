@@ -24,9 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -88,8 +86,8 @@ public class TeacherController {
         if( course.isPresent()  && teacher.isPresent()){
 
 
-            if(course.get().getTeacher() != null)  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Course already taken");
-            course.get().setTeacher(teacher.get());
+
+            course.get().getTeacher().add(teacher.get());
             courseDB.save(course.get());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
 
@@ -108,7 +106,7 @@ public class TeacherController {
         if(reqTeacher.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
 
-        List<Course> courses = courseDB.findCoursesByTeacher(reqTeacher.get());
+        List<Course> courses = courseDB.findCoursesByTeacherContains(reqTeacher.get());
 
         List<ObjectNode> result = new ArrayList<>();
 

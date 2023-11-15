@@ -54,17 +54,18 @@ public class CourseRegistrationController {
     @ResponseBody
     private ResponseEntity<List<ObjectNode>> get_all_course(@RequestParam String department , HttpServletRequest hsr){
 
+        System.out.println("Trynna get courses");
         if(!check_session(hsr)) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
         List<Course> courses = courseDB.findCoursesByDepartment(department);
         List<ObjectNode> course_names = new ArrayList<>();
 
        for(Course c : courses){
-
+           System.out.println("Trynna loop");
            ObjectNode courseNode=mapper.createObjectNode();
            courseNode.put("hid" , c.getHid().toString());
            courseNode.put("name" ,c.getDepartment()+" "+c.getCourseId().toString()+" "+" "+c.getSection()+" "+ c.getCourseName());
-           if(c.getTeacher() == null )course_names.add(courseNode);
+           course_names.add(courseNode);
        }
        return ResponseEntity.status(HttpStatus.ACCEPTED).body(course_names);
 

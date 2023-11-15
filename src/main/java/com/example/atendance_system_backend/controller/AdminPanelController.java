@@ -5,7 +5,6 @@ import com.example.atendance_system_backend.course.CourseRepository;
 import com.example.atendance_system_backend.department.Department;
 import com.example.atendance_system_backend.department.DepartmentRepository;
 import com.example.atendance_system_backend.email.GmailEmailSender;
-import com.example.atendance_system_backend.file.FileStorageService;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
@@ -18,13 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @RestController
@@ -33,6 +30,7 @@ public class AdminPanelController {
 
     @Autowired
     TeacherRepository teacherDB;
+
 
     @Autowired
     CourseRepository courseDB;
@@ -77,7 +75,7 @@ public class AdminPanelController {
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
 
-        Course new_course = new Course(null , department , courseId , count , section ,semester ,courseName, null);
+        Course new_course = new Course(null , department , courseId , count , section ,semester ,courseName, new HashSet<>());
         courseDB.save(new_course);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
     }
@@ -100,8 +98,9 @@ public class AdminPanelController {
 
 
         if( course.isPresent()  && teacher.isPresent()){
-
-            course.get().setTeacher(teacher.get());
+            Set<Teacher> teacherset = new HashSet<>();
+            teacherset.add(teacher.get());
+            course.get().setTeacher(teacherset);
             courseDB.save(course.get());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
 
@@ -301,7 +300,7 @@ public class AdminPanelController {
 
 
 
-                    Course course = new Course(null , dept, code , student_count , c , sem ,courseName , null);
+                    Course course = new Course(null , dept, code , student_count , c , sem ,courseName , new HashSet<>());
                     courseDB.save(course);
 
                     //System.out.println(); // Move to the next line for the next record
