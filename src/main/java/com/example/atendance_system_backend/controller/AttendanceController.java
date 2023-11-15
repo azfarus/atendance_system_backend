@@ -155,7 +155,7 @@ public class AttendanceController {
         List<Long> defaulters = new ArrayList<>();
         for(StudentTakesCourse k :  studentsInCourse){
             Double percentVal = get_percentage_func(hid , k.getStudentId());
-            if( percentVal>= 0 && percentVal <= percentage )defaulters.add(k.getStudentId());
+            if( percentVal>= 0 && percentVal < percentage )defaulters.add(k.getStudentId());
             System.out.println("ID "+ k.getStudentId() +" Percentage "+percentVal);
         }
 
