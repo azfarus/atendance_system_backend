@@ -130,7 +130,7 @@ public class AttendanceController {
 
 
         String topic = "Low Attendance Percentage";
-        String message= "Your attendance percentage in your course : "+c.get().getCourseId()+" "+c.get().getCourseName()+" is below 85%.";
+        String message= "Your attendance percentage in your course : "+c.get().getCourseId()+" "+c.get().getCourseName()+" is below the required limit.";
 
         for(Long x : defaulters){
             System.out.println(x);

@@ -3,13 +3,17 @@ package com.example.atendance_system_backend.controller;
 
 import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
+import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
+import com.example.atendance_system_backend.coursereg.StudentTakesCourseRepository;
 import com.example.atendance_system_backend.department.Department;
 import com.example.atendance_system_backend.department.DepartmentRepository;
+import com.example.atendance_system_backend.email.GmailEmailSender;
 import com.example.atendance_system_backend.file.File;
 import com.example.atendance_system_backend.file.FileStorageService;
 import com.example.atendance_system_backend.session.MySession;
 import com.example.atendance_system_backend.session.MySessionRepository;
 import com.example.atendance_system_backend.student.Student;
+import com.example.atendance_system_backend.student.StudentRepository;
 import com.example.atendance_system_backend.teacher.Teacher;
 import com.example.atendance_system_backend.teacher.TeacherRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,6 +40,9 @@ public class TeacherController {
     MySessionRepository sessionDB;
 
     @Autowired
+    StudentRepository studentDB;
+
+    @Autowired
     TeacherRepository teacherDB;
 
     @Autowired
@@ -50,6 +57,12 @@ public class TeacherController {
 
     @Autowired
     DepartmentRepository departmentDB;
+
+    @Autowired
+    StudentTakesCourseRepository regDB;
+
+    @Autowired
+    GmailEmailSender gmailEmailSender;
 
     @GetMapping("/info")
     @ResponseBody
@@ -70,6 +83,37 @@ public class TeacherController {
 
     }
 
+
+    @PostMapping("/course-register")
+    @ResponseBody
+    private ResponseEntity<String> register_course(@RequestParam Long stud_id ,@RequestParam Long hid) throws Exception {
+
+
+
+        Optional<Course> reg_course = courseDB.findById(hid);
+
+        if(reg_course.isEmpty()) {
+            System.out.println("NOCOURSE");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("NO COURSE");
+        }
+
+        Optional<Student> s = studentDB.findStudentById(stud_id);
+
+        if(s.isEmpty()) {
+            System.out.println("Invalid id");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid ID");
+        }
+        StudentTakesCourse new_reg = new StudentTakesCourse(stud_id , hid);
+
+        regDB.save(new_reg);
+        Course x = reg_course.get();
+
+        String mailsubj= "Course registration successful";
+        String mailbody= "You have been registered to:\n" +x.getCourseId()+" "+ x.getCourseName()+"\nSection:"+x.getSection().toString();
+        gmailEmailSender.sendEmail(s.get().getMail() , mailsubj , mailbody);
+        return ResponseEntity.status(HttpStatus.OK).body("Registration complete");
+
+    }
 
     @CrossOrigin
     @PostMapping("/course-teacher-assign")
