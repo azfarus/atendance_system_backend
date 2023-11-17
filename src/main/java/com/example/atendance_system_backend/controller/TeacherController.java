@@ -161,6 +161,7 @@ public class TeacherController {
             teacher.put("courseid" , x.getCourseId());
             teacher.put("department" , x.getDepartment());
             teacher.put("section" , x.getSection().toString());
+            teacher.put("code" , obfuscate(x.getHid()));
 
             result.add(teacher);
         }
@@ -214,7 +215,7 @@ public class TeacherController {
         Optional<Teacher> s = teacherDB.findTeacherById(teachid);
 
         if(s.isEmpty()) ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
+        if(s.get().getFileId()==null) ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         File fileDB = fileStorageService.getFile(s.get().getFileId());
 
         return ResponseEntity.ok()
@@ -232,5 +233,12 @@ public class TeacherController {
         Optional<MySession> sess= sessionDB.findById(id);
 
         return sess.isPresent() && sess.get().getType().equals("teacher");
+    }
+
+
+    public static String obfuscate(Long n) {
+        long x;
+        x = (n * 1708159939L) % 2176782336L;
+        return String.format("%6s",Long.toString(x, 36).toUpperCase()).replace(' ','0');
     }
 }

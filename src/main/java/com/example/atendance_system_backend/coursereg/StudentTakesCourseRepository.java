@@ -8,7 +8,7 @@ import java.util.List;
 public interface StudentTakesCourseRepository extends JpaRepository<StudentTakesCourse, StudentCourseIdClass> {
     List<StudentTakesCourse> findAllByCourseHid(Long hid);
 
-
+    void deleteStudentTakesCourseByCourseHid(Long hid);
 
     List<StudentTakesCourse> findByStudentId(Long sid);
 }

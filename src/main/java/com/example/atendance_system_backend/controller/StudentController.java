@@ -5,6 +5,7 @@ import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourseRepository;
 import com.example.atendance_system_backend.department.Department;
 import com.example.atendance_system_backend.department.DepartmentRepository;
+import com.example.atendance_system_backend.email.GmailEmailSender;
 import com.example.atendance_system_backend.file.File;
 import com.example.atendance_system_backend.file.FileStorageService;
 import com.example.atendance_system_backend.session.MySession;
@@ -13,10 +14,7 @@ import com.example.atendance_system_backend.student.Student;
 import com.example.atendance_system_backend.student.StudentRepository;
 import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
-import com.example.atendance_system_backend.attendance.Attendance;
 import com.example.atendance_system_backend.attendance.AttendanceRepository;
-import com.example.atendance_system_backend.teacher.Teacher;
-import com.example.atendance_system_backend.teacher.TeacherRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +59,9 @@ public class StudentController {
 
     @Autowired
     AttendanceRepository attendanceDB;
+
+    @Autowired
+    GmailEmailSender gmailEmailSender;
 
     @GetMapping("/info")
     @ResponseBody
@@ -130,6 +131,7 @@ public class StudentController {
 
         return ResponseEntity.status(HttpStatus.OK).body(courseInfoList);
     }
+
 
     @CrossOrigin
     @PostMapping("/upload-photo/{studid}")
@@ -212,6 +214,28 @@ public class StudentController {
 
     }
 
+    @PostMapping("/code-enroll")
+    @ResponseBody
+    private ResponseEntity<String> code_enroll(@RequestParam String sheetcode , @RequestParam Long stud_id ) throws Exception {
+        Long hid = deobfuscate(sheetcode);
+
+
+        if(courseDB.existsById(hid) && studentDB.existsById(stud_id)){
+
+            Optional<Course> c = courseDB.findById(hid);
+            Optional<Student> s = studentDB.findById(stud_id);
+
+            Course x = c.get();
+            courseregDB.save(new StudentTakesCourse(stud_id , hid));
+            String mailsubj= "Course registration successful";
+            String mailbody= "You have been registered to:\n" +x.getCourseId()+" "+ x.getCourseName()+"\nSection:"+x.getSection().toString();
+
+            gmailEmailSender.sendEmail(s.get().getMail() , mailsubj , mailbody);
+            return ResponseEntity.status(HttpStatus.OK).body("SUCCESS");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FAIL");
+    }
+
     @GetMapping("/get-percentage/{hid}/{sid}")
     @ResponseBody
     private ResponseEntity<Double> get_percentage(@PathVariable Long hid , @PathVariable Long sid){
@@ -285,6 +309,10 @@ public class StudentController {
         }
     }
 
+
+    public static Long deobfuscate(String s) {
+        return (Long.valueOf(s, 36) * 1553655019L) % 2176782336L;
+    }
 
     public  boolean check_session(HttpServletRequest hsr){
 

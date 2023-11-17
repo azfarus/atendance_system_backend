@@ -4,6 +4,7 @@ import com.example.atendance_system_backend.attendance.Attendance;
 import com.example.atendance_system_backend.attendance.AttendanceRepository;
 import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
+import com.example.atendance_system_backend.coursereg.StudentCourseIdClass;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourseRepository;
 import com.example.atendance_system_backend.email.GmailEmailSender;
@@ -193,7 +194,38 @@ public class AttendanceController {
 
     }
 
+    @DeleteMapping("/unenroll")
+    @ResponseBody
+    private  ResponseEntity<String> unenroll_teacher(@RequestParam Long tid , @RequestParam Long hid){
 
+
+        Optional<Teacher> tchr = teacherDB.findTeacherById(tid);
+        Optional<Course>  course = courseDB.findById(hid);
+
+        if(tchr.isPresent() && course.isPresent()){
+            tchr.get().getCourse().remove(course.get());
+            teacherDB.save(tchr.get());
+            return ResponseEntity.status(HttpStatus.OK).body("UNENROLLED");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FAILED");
+    }
+
+    @DeleteMapping("/delete-student")
+    @ResponseBody
+    private ResponseEntity<String> delete_stud(@RequestParam Long hid , @RequestParam Long stud_id){
+
+        courseregDB.deleteById(new StudentCourseIdClass(stud_id , hid));
+        return ResponseEntity.status(HttpStatus.OK).body("DELETED");
+    }
+
+
+    @DeleteMapping("/delete-all-student")
+    @ResponseBody
+    private ResponseEntity<String> delete_all_stud(@RequestParam Long hid ){
+
+        courseregDB.deleteStudentTakesCourseByCourseHid(hid);
+        return ResponseEntity.status(HttpStatus.OK).body("DELETED");
+    }
     @GetMapping("/prev-attendance/{hid}")
     @ResponseBody
     private ResponseEntity<ObjectNode> prev_attendance( @PathVariable Long hid) throws JsonProcessingException {
