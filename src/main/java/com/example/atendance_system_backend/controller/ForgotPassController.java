@@ -59,7 +59,8 @@ public class ForgotPassController {
 
 
         String token=StringHasher.hashString(id.toString() + Instant.now().toString());
-        String emailBody = "Click here to change pass"+" "+"http://"+reset_endpoint+"/reset.html?token="+token+"&server="+server_endpoint;
+        String emailBody = "Click here to change your password: http://" + reset_endpoint + "/reset.html?token=" + token + "&server=" + server_endpoint;
+
         tk_DB.save(new TokenTable(id , token , Instant.now()));
 
         if(stdnt.isPresent() && tchr.isPresent()){
