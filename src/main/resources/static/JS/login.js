@@ -1,6 +1,6 @@
 
 
-hostaddr="localhost:8081";
+hostaddr="atendancesystembackend-production.up.railway.app";
 //atendancesystembackend-production.up.railway.app
 //hostaddr="192.168.1.66";
 localStorage.setItem('host', hostaddr);
