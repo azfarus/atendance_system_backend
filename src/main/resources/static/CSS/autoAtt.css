@@ -48,10 +48,10 @@
 
 #attendance-table th, #attendance-table td {
     border: 1px solid #000000;
-    padding: 8px;
+    padding: 6px;
     text-align: center;
     min-width: 90px; /* Set a fixed width for table cells */
-    font-size: 20px;
+    font-size: 18px;
 }
 
 #attendance-table th{
@@ -261,7 +261,7 @@ a {
   color: #ffffff;
   padding: 1.2rem 7.5rem;
   text-decoration: double;
-  border-radius: 2.5rem;
+  border-radius: 1rem;
   cursor: pointer;
   font-size:large;
   font-weight: bold;

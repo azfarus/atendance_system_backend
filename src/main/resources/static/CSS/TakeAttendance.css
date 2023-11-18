@@ -94,10 +94,10 @@
 
 #attendance-table th, #attendance-table td {
     border: 1px solid #000000;
-    padding: 8px;
+    padding: 6px;
     text-align: center;
     min-width: 90px; /* Set a fixed width for table cells */
-    font-size: 20px;
+    font-size: 18px;
 }
 
 #attendance-table th{
