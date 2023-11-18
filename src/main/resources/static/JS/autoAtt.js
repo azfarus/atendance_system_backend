@@ -141,11 +141,11 @@ function displayAttendanceData() {
 
         const currentDate = new Date();
         const options = { timeZone: 'Asia/Dhaka', year: 'numeric', month: '2-digit', day: '2-digit' };
-        //const formattedDateParts = currentDate.toLocaleDateString('en-US', options).split('/');
-        //const formattedDate = `${formattedDateParts[2]}-${formattedDateParts[0].padStart(2, '0')}-${formattedDateParts[1].padStart(2, '0')}`;
+        const formattedDateParts = currentDate.toLocaleDateString('en-US', options).split('/');
+        const formattedDate = `${formattedDateParts[2]}-${formattedDateParts[0].padStart(2, '0')}-${formattedDateParts[1].padStart(2, '0')}`;
 
         $.ajax({
-            url: 'https://'+hostaddr+':8081/attendance/submit-attendance/'+hid + '?attendanceDate=' + currentDate, // Replace with your API endpoint
+            url: 'https://'+hostaddr+':8081/attendance/submit-attendance/'+hid + '?attendanceDate=' + formattedDate, // Replace with your API endpoint
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(attendanceData),
