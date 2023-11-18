@@ -2,22 +2,22 @@ hostaddr=localStorage.getItem('host');
 
 $(document).ready(function () {
 
-const sidebarItems = document.querySelectorAll(".sidebar li");
-const sections = document.querySelectorAll(".section");
+  const sidebarItems = document.querySelectorAll(".sidebar li");
+  const sections = document.querySelectorAll(".section");
 
-sidebarItems.forEach((item) => {
-  item.addEventListener("click", () => {
-    // Remove active class from all sidebar items
-    sidebarItems.forEach((item) => item.classList.remove("active"));
-    // Add active class to clicked item
-    item.classList.add("active");
-    const target = item.getAttribute("data-target");
-    // Hide all sections
-    sections.forEach((section) => section.classList.remove("active"));
-    // Show target section
-    document.querySelector(target).classList.add("active");
+  sidebarItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      // Remove active class from all sidebar items
+      sidebarItems.forEach((item) => item.classList.remove("active"));
+      // Add active class to clicked item
+      item.classList.add("active");
+      const target = item.getAttribute("data-target");
+      // Hide all sections
+      sections.forEach((section) => section.classList.remove("active"));
+      // Show target section
+      document.querySelector(target).classList.add("active");
+    });
   });
-});
 
   // Get session data and hash from local storage
   sessiondata = localStorage.getItem("mysession");
@@ -26,7 +26,7 @@ sidebarItems.forEach((item) => {
   // Function to check if the user is authenticated
   function checkAuthentication() {
     $.ajax({
-      url: "http://"+hostaddr+"/session/get-session-data",
+      url: "https://"+hostaddr+"/session/get-session-data",
       method: "GET",
       headers: {
         'mysession': sessiondata,
@@ -48,7 +48,7 @@ sidebarItems.forEach((item) => {
     let teacherId = null;
 
     $.ajax({
-      url: "http://"+hostaddr+"/session/get-session-data",
+      url: "https://"+hostaddr+"/session/get-session-data",
       method: "GET",
       async: false,
       headers: {
@@ -70,10 +70,10 @@ sidebarItems.forEach((item) => {
   function fetchTeacherData() {
     const teacherId = getSessionTeacherId();
     const profilePicture = document.getElementById("profilePicture");
-    profilePicture.src = "http://"+hostaddr+"/teacher/get-photo/" + teacherId;
+    profilePicture.src = "https://"+hostaddr+"/teacher/get-photo/" + teacherId;
 
     $.ajax({
-      url: "http://"+hostaddr+"/teacher/info",
+      url: "https://"+hostaddr+"/teacher/info",
       method: "GET",
       headers: {
         'mysession': sessiondata,
@@ -91,7 +91,7 @@ sidebarItems.forEach((item) => {
     });
 
     $.ajax({
-      url: "http://"+hostaddr+"/teacher/sheets",
+      url: "https://"+hostaddr+"/teacher/sheets",
       method: "GET",
       headers: {
         'mysession': sessiondata,
@@ -127,86 +127,86 @@ sidebarItems.forEach((item) => {
   }
 
   // Function to create a course block
-function createCourseBlock(course) {
-  const courseBlock = document.createElement("div");
-  courseBlock.className = "course";
-  courseBlock.style.position = "relative"; // Set the position to relative for absolute positioning of the icon
+  function createCourseBlock(course) {
+    const courseBlock = document.createElement("div");
+    courseBlock.className = "course";
+    courseBlock.style.position = "relative"; // Set the position to relative for absolute positioning of the icon
 
-  const courseCode = document.createElement("div");
-  courseCode.className = "course-code";
-  courseCode.textContent = `${course.department} ${course.courseid} - ${course.section}`;
+    const courseCode = document.createElement("div");
+    courseCode.className = "course-code";
+    courseCode.textContent = `${course.department} ${course.courseid} - ${course.section}`;
 
-  const courseName = document.createElement("div");
-  courseName.className = "course-name";
-  courseName.textContent = `${course.coursename}`;
-  const classCode = document.createElement("div");
-  classCode.className = "classCode";
-  classCode.textContent = `${course.code}`;
-  classCode.style.color = "#fff3cf";
-  classCode.style.fontSize = "small";
+    const courseName = document.createElement("div");
+    courseName.className = "course-name";
+    courseName.textContent = `${course.coursename}`;
+    const classCode = document.createElement("div");
+    classCode.className = "classCode";
+    classCode.textContent = `${course.code}`;
+    classCode.style.color = "#fff3cf";
+    classCode.style.fontSize = "small";
 
-  const viewSheetButton = createButton("View Sheet", course.hid, redirectToSheet);
-  const takeAttendanceButton = createButton("Take Attendance", course.hid, redirectToAttendance);
-  const autoplay = document.createElement("a");
-  autoplay.href = "autoAtt.html?hid=" + course.hid;
+    const viewSheetButton = createButton("View Sheet", course.hid, redirectToSheet);
+    const takeAttendanceButton = createButton("Take Attendance", course.hid, redirectToAttendance);
+    const autoplay = document.createElement("a");
+    autoplay.href = "autoAtt.html?hid=" + course.hid;
 
-  const image = document.createElement("img");
-  image.src = "../images/play.webp";
-  image.className = "autoplay";
-  autoplay.appendChild(image);
+    const image = document.createElement("img");
+    image.src = "../images/play.webp";
+    image.className = "autoplay";
+    autoplay.appendChild(image);
 
-  // Create the delete icon
-  const deleteIcon = document.createElement("img");
-  deleteIcon.src = "../images/delicon.png";
-  deleteIcon.className = "icon";
+    // Create the delete icon
+    const deleteIcon = document.createElement("img");
+    deleteIcon.src = "../images/delicon.png";
+    deleteIcon.className = "icon";
 
-  deleteIcon.setAttribute("hid", course.hid);   //const customValue = deleteIcon.getAttribute("hid");
-  deleteIcon.style.position = "absolute";
-  deleteIcon.style.top = "7px";
-  deleteIcon.style.right = "7px";
-  deleteIcon.id = course.hid;
+    deleteIcon.setAttribute("hid", course.hid);   //const customValue = deleteIcon.getAttribute("hid");
+    deleteIcon.style.position = "absolute";
+    deleteIcon.style.top = "7px";
+    deleteIcon.style.right = "7px";
+    deleteIcon.id = course.hid;
 
-  deleteIcon.addEventListener("click", function() {
-    const isConfirmed = window.confirm(`Unenroll from course ${course.department} ${course.courseid} - ${course.section} ?`);
-    if (isConfirmed) {
-      deleteCourse(course.hid);
-    }
-  });
+    deleteIcon.addEventListener("click", function() {
+      const isConfirmed = window.confirm(`Unenroll from course ${course.department} ${course.courseid} - ${course.section} ?`);
+      if (isConfirmed) {
+        deleteCourse(course.hid);
+      }
+    });
 
-  courseBlock.appendChild(courseCode);
-  courseBlock.appendChild(courseName);
-  courseBlock.appendChild(classCode);
-  courseBlock.appendChild(viewSheetButton);
-  courseBlock.appendChild(takeAttendanceButton);
-  courseBlock.appendChild(autoplay);
-  courseBlock.appendChild(deleteIcon);
+    courseBlock.appendChild(courseCode);
+    courseBlock.appendChild(courseName);
+    courseBlock.appendChild(classCode);
+    courseBlock.appendChild(viewSheetButton);
+    courseBlock.appendChild(takeAttendanceButton);
+    courseBlock.appendChild(autoplay);
+    courseBlock.appendChild(deleteIcon);
 
-  return courseBlock;
-}
+    return courseBlock;
+  }
 
-function deleteCourse(hid) {
-  console.log("Deleting course with hid:", hid);
-  console.log("teacher id:", getSessionTeacherId());
-  $.ajax({
-    url: "http://" + hostaddr + "/attendance/unenroll",
-    method: "DELETE",
-    data: {
-      tid: getSessionTeacherId(),
-      hid: hid,
-    },
-    headers: {
-      'mysession': sessiondata,
-      'Authorization': 'Basic ' + hashdata
-    },
-    success: function (response) {
-      alert("Course unenrolled successfully");
-      console.log("Course unenrolled successfully ", response);
-    },
-    error: function (error) {
-      console.error("Error unenrolling course:", error.responseText);
-    },
-  });
-}
+  function deleteCourse(hid) {
+    console.log("Deleting course with hid:", hid);
+    console.log("teacher id:", getSessionTeacherId());
+    $.ajax({
+      url: "https://" + hostaddr + "/attendance/unenroll",
+      method: "DELETE",
+      data: {
+        tid: getSessionTeacherId(),
+        hid: hid,
+      },
+      headers: {
+        'mysession': sessiondata,
+        'Authorization': 'Basic ' + hashdata
+      },
+      success: function (response) {
+        alert("Course unenrolled successfully");
+        console.log("Course unenrolled successfully ", response);
+      },
+      error: function (error) {
+        console.error("Error unenrolling course:", error.responseText);
+      },
+    });
+  }
 
 
   // Function to create a button element
@@ -231,7 +231,7 @@ function deleteCourse(hid) {
     if (selectedFile) {
       const formData = new FormData();
       formData.append("file", selectedFile);
-      const uploadUrl = `http://${hostaddr}/teacher/upload-photo/${getSessionTeacherId()}`;
+      const uploadUrl = `https://${hostaddr}/teacher/upload-photo/${getSessionTeacherId()}`;
 
       $.ajax({
         url: uploadUrl,
@@ -285,14 +285,14 @@ function deleteCourse(hid) {
     var dept_t = $("#dept_teacher").val();
     var course_t = $("#courses_teacher").val();
     var section_t = $("#section_teacher").val();
-    
-    
+
+
     // Create a data object with the parameters
     var data = {
-      
+
       hid: course_t,
       teacherid :id_t,
-      
+
     };
 
     console.log(data);
@@ -300,7 +300,7 @@ function deleteCourse(hid) {
     hashdata = localStorage.getItem("myhash");
     // Make the AJAX request to add teacher
     $.ajax({
-      url: "http://"+hostaddr+"/teacher/course-teacher-assign", // Replace with your backend API endpoint
+      url: "https://"+hostaddr+"/teacher/course-teacher-assign", // Replace with your backend API endpoint
       method: "POST",
       data: jQuery.param(data),
       contentType: "application/x-www-form-urlencoded; charset=UTF-8",
@@ -334,7 +334,7 @@ function populateDepartmentDropdown() {
   const hashdata = localStorage.getItem("myhash");
 
   $.ajax({
-    url: "http://"+hostaddr+"/teacher/departments",
+    url: "https://"+hostaddr+"/teacher/departments",
     method: "GET",
     headers: {
       'mysession': sessiondata,
@@ -365,7 +365,7 @@ function populateCoursesDropdown(dept) {
   const hashdata = localStorage.getItem("myhash");
 
   $.ajax({
-    url: "http://"+hostaddr+"/course/get-course-by-dept",
+    url: "https://"+hostaddr+"/course/get-course-by-dept",
     method: "GET",
     headers: {
       'mysession': sessiondata,

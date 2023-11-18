@@ -4,14 +4,14 @@ $(document).ready(function () {
   sessiondata = localStorage.getItem("mysession");
   hashdata = localStorage.getItem("myhash");
   $.ajax({
-    url: "http://"+hostaddr+"/session/get-session-data",
+    url: "https://"+hostaddr+"/session/get-session-data",
     method: "GET",
     headers: {
       'mysession': sessiondata,
       'Authorization': 'Basic ' + hashdata
     },
     success: function (response) {
-      
+
     },
     error: function (error) {
       // Handle any errors here
@@ -37,15 +37,15 @@ sidebarItems.forEach((item) => {
   });
 });
 
-  // Function to get the Student's ID from the session
+// Function to get the Student's ID from the session
 function getSessionStudentId() {
   var Studentid = null;
-  
+
   sessiondata = localStorage.getItem("mysession");
   hashdata = localStorage.getItem("myhash");
   // Make an AJAX GET request to fetch the Student's ID from the session
   $.ajax({
-    url: "http://"+hostaddr+"/session/get-session-data", // Replace with your backend API endpoint
+    url: "https://"+hostaddr+"/session/get-session-data", // Replace with your backend API endpoint
     method: "GET",
     async: false, // Synchronous request to wait for the response
     headers: {
@@ -59,7 +59,7 @@ function getSessionStudentId() {
       console.error("Error fetching Student ID");
     },
   });
-  
+
   return Studentid;
 }
 
@@ -73,7 +73,7 @@ function fetchStudentData() {
   sessiondata = localStorage.getItem("mysession");
   hashdata = localStorage.getItem("myhash");
   $.ajax({
-    url: "http://"+hostaddr+"/student/info", // Replace with your backend API endpoint
+    url: "https://"+hostaddr+"/student/info", // Replace with your backend API endpoint
     method: "GET",
     headers: {
       'mysession': sessiondata,
@@ -94,11 +94,11 @@ function fetchStudentData() {
     },
   });
 
-  
-const studentId = sid;
 
-$.ajax({
-    url: `http://`+hostaddr+`/student/get-student-data/${studentId}`,
+  const studentId = sid;
+
+  $.ajax({
+    url: `https://`+hostaddr+`/student/get-student-data/${studentId}`,
     method: "GET",
     headers: {
       'mysession': sessiondata,
@@ -106,20 +106,20 @@ $.ajax({
     },
     dataType: "json",
     success: function (data) {
-        console.log("Student Data:", data);
+      console.log("Student Data:", data);
 
-        const phoneNumber = '0' + data.phoneNumber;
-        const email = data.email;
-        const address = data.address;
+      const phoneNumber = '0' + data.phoneNumber;
+      const email = data.email;
+      const address = data.address;
 
-        $("#phone_student").val(phoneNumber);
-        $("#email_student").val(email);
-        $("#address_student").val(address);
+      $("#phone_student").val(phoneNumber);
+      $("#email_student").val(email);
+      $("#address_student").val(address);
     },
     error: function (error) {
-        console.error("Error fetching student data:", error);
+      console.error("Error fetching student data:", error);
     }
-});
+  });
 
 }
 
@@ -131,25 +131,25 @@ function populateStudentDashboard(StudentData) {
 
   sessiondata = localStorage.getItem("mysession");
   hashdata = localStorage.getItem("myhash");
-      const profilePicture = document.getElementById('profilePicture');
-      profilePicture.src = "http://"+hostaddr+"/student/get-photo/" + StudentData.id;
+  const profilePicture = document.getElementById('profilePicture');
+  profilePicture.src = "https://"+hostaddr+"/student/get-photo/" + StudentData.id;
 }
 
 
 $('#updateStudentForm').submit(function(event) {
   event.preventDefault(); // Prevent the default form submission
   var sid = getSessionStudentId(); // Implement this function to retrieve the Student ID from the session
-  
+
   var phn = $('#phone_student').val();
-        phn = phn.replace(/[^0-9+]/g, "");
-        // Remove any prefix like "+88" or "+sth"
-        if (phn.startsWith("+88")) {
-            phn = phn.slice(3,14);
-            console.log(phn);
-          }
-          // Limit the length to 11 digits
-          phn = phn.slice(0, 11);
-          console.log(phn);
+  phn = phn.replace(/[^0-9+]/g, "");
+  // Remove any prefix like "+88" or "+sth"
+  if (phn.startsWith("+88")) {
+    phn = phn.slice(3,14);
+    console.log(phn);
+  }
+  // Limit the length to 11 digits
+  phn = phn.slice(0, 11);
+  console.log(phn);
 
 
   // Collect form data
@@ -158,10 +158,10 @@ $('#updateStudentForm').submit(function(event) {
     email: $('#email_student').val(),
     address: $('#address_student').val()
   };
-  
+
   // Create a new FormData object
   var form = new FormData();
-  
+
   // Append form fields to FormData
   for (var key in formData) {
     form.append(key, formData[key]);
@@ -173,25 +173,25 @@ $('#updateStudentForm').submit(function(event) {
 
   // Make an AJAX POST request
   $.ajax({
-      url: 'http://'+hostaddr+'/student/update-data/'+sid, // Replace with your backend API endpoint
-      type: 'POST',
-      headers: {
-        'mysession': sessiondata,
-        'Authorization': 'Basic ' + hashdata
-      },
-      data: form,
-      processData: false, // Prevent jQuery from processing the data
-      contentType: false, // Prevent jQuery from setting the content type
-      success: function(response) {
-          // Handle the success response from the backen
-          alert("Data updated successfully");
-          console.log('Data sent successfully:', response);
-          window.location.href = "student_dash.html";
-      },
-      error: function(error) {
-          // Handle errors
-          console.error('Error sending data:', error);
-      }
+    url: 'https://'+hostaddr+'/student/update-data/'+sid, // Replace with your backend API endpoint
+    type: 'POST',
+    headers: {
+      'mysession': sessiondata,
+      'Authorization': 'Basic ' + hashdata
+    },
+    data: form,
+    processData: false, // Prevent jQuery from processing the data
+    contentType: false, // Prevent jQuery from setting the content type
+    success: function(response) {
+      // Handle the success response from the backen
+      alert("Data updated successfully");
+      console.log('Data sent successfully:', response);
+      window.location.href = "student_dash.html";
+    },
+    error: function(error) {
+      // Handle errors
+      console.error('Error sending data:', error);
+    }
   });
 });
 
@@ -200,105 +200,105 @@ $('#updateStudentForm').submit(function(event) {
 // Call the function to fetch Student's data when the page loads
 $(document).ready(function () {
   fetchStudentData();
-  
+
   sessiondata = localStorage.getItem("mysession");
   hashdata = localStorage.getItem("myhash");
-  const apiUrl = "http://"+hostaddr+"/student/";
-  
+  const apiUrl = "https://"+hostaddr+"/student/";
+
 // Step 1: Fetch all course information
-$.ajax({
-  url: apiUrl + "courses_info",
-  type: "GET",
-  headers: {
-    'mysession': sessiondata,
-    'Authorization': 'Basic ' + hashdata
-  },
-  dataType: "json",
-  success: function (allCourses) {
-    
-    studentId = getSessionStudentId(); // Replace with the actual student ID
-    const enrolledCourses = [];
-    const getAttendancePromises = [];
+  $.ajax({
+    url: apiUrl + "courses_info",
+    type: "GET",
+    headers: {
+      'mysession': sessiondata,
+      'Authorization': 'Basic ' + hashdata
+    },
+    dataType: "json",
+    success: function (allCourses) {
 
-    // Step 2: Fetch the courses a student is enrolled in
-    $.ajax({
-      url: apiUrl + "courses/" + studentId,
-      type: "GET",
-      headers: {
-        'mysession': sessiondata,
-        'Authorization': 'Basic ' + hashdata
-      },
-      dataType: "json",
-      success: function (studentCourses) {
-        // Handle the response data here
-        console.log("Student Courses Data:", studentCourses);
+      studentId = getSessionStudentId(); // Replace with the actual student ID
+      const enrolledCourses = [];
+      const getAttendancePromises = [];
 
-        // Compare and find matching courses
-        for (const course of allCourses) {
-          if (studentCourses.includes(course.hid)) {
-            const promise = getAttendancePercentage(studentId, course.hid);
-            getAttendancePromises.push(promise);
+      // Step 2: Fetch the courses a student is enrolled in
+      $.ajax({
+        url: apiUrl + "courses/" + studentId,
+        type: "GET",
+        headers: {
+          'mysession': sessiondata,
+          'Authorization': 'Basic ' + hashdata
+        },
+        dataType: "json",
+        success: function (studentCourses) {
+          // Handle the response data here
+          console.log("Student Courses Data:", studentCourses);
 
-            enrolledCourses.push({
-              hid: course.hid,
-              department: course.department,
-              courseid: course.courseid,
-              courseName: course.courseName,
-            });
+          // Compare and find matching courses
+          for (const course of allCourses) {
+            if (studentCourses.includes(course.hid)) {
+              const promise = getAttendancePercentage(studentId, course.hid);
+              getAttendancePromises.push(promise);
+
+              enrolledCourses.push({
+                hid: course.hid,
+                department: course.department,
+                courseid: course.courseid,
+                courseName: course.courseName,
+              });
+            }
           }
-        }
 
-        Promise.all(getAttendancePromises)
-      .then(attendancePercentages => {
-        // Extract labels and data from enrolledCourses
-        const labels = enrolledCourses.map(course => `${course.department} ${course.courseid}`);
-        const data = attendancePercentages.map(percentage => parseFloat(percentage));
-        console.log("Attendance Percentages:", data);
-        
-        // Define your chart data
-        var chartData = {
-          labels: labels,
-          datasets: [
-            {
-              label: "Attendance Perecentage",
-              data: data,
-              backgroundColor: "rgba(75, 192, 192, 0.2)", // Fill color
-              borderColor: "rgba(75, 192, 192, 1)", // Border color
-              borderWidth: 2,
-            },
-          ],
-        };
+          Promise.all(getAttendancePromises)
+              .then(attendancePercentages => {
+                // Extract labels and data from enrolledCourses
+                const labels = enrolledCourses.map(course => `${course.department} ${course.courseid}`);
+                const data = attendancePercentages.map(percentage => parseFloat(percentage));
+                console.log("Attendance Percentages:", data);
 
-        var ctx = document.getElementById("myChart").getContext("2d");
+                // Define your chart data
+                var chartData = {
+                  labels: labels,
+                  datasets: [
+                    {
+                      label: "Attendance Perecentage",
+                      data: data,
+                      backgroundColor: "rgba(75, 192, 192, 0.2)", // Fill color
+                      borderColor: "rgba(75, 192, 192, 1)", // Border color
+                      borderWidth: 2,
+                    },
+                  ],
+                };
 
-        // Create the chart
-        var myChart = new Chart(ctx, {
-          type: 'line',
-          data: chartData,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                stepSize: 10, // Set the y-axis step size
-                suggestedMax: 100, // Set the maximum value for the y-axis
-                beginAtZero: true, // Do not start the y-axis at zero
-              },
-            },
-          },
-        });
-        displayCourses(enrolledCourses);
-      })
-      .catch(error => {
-        console.error("Error fetching attendance percentages:", error);
+                var ctx = document.getElementById("myChart").getContext("2d");
+
+                // Create the chart
+                var myChart = new Chart(ctx, {
+                  type: 'line',
+                  data: chartData,
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                      y: {
+                        stepSize: 10, // Set the y-axis step size
+                        suggestedMax: 100, // Set the maximum value for the y-axis
+                        beginAtZero: true, // Do not start the y-axis at zero
+                      },
+                    },
+                  },
+                });
+                displayCourses(enrolledCourses);
+              })
+              .catch(error => {
+                console.error("Error fetching attendance percentages:", error);
+              });
+        },
       });
-      },
-    });
-  },
-  error: function (error) {
-    console.error("Error fetching all courses:", error);
-  },
-});
+    },
+    error: function (error) {
+      console.error("Error fetching all courses:", error);
+    },
+  });
 
 });
 
@@ -336,7 +336,7 @@ function getAttendancePercentage(studentId, hid) {
 
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `http://`+hostaddr+`/student/get-percentage/${hid}/${studentId}`,
+      url: `https://`+hostaddr+`/student/get-percentage/${hid}/${studentId}`,
       type: "GET",
       headers: {
         mysession: sessiondata,
@@ -360,7 +360,7 @@ function getAttendancePercentage(studentId, hid) {
 // Function to handle code enrollment
 function codeEnroll(sheetCode, studentId) {
   $.ajax({
-    url: `http://${hostaddr}/student/code-enroll`,
+    url: `https://${hostaddr}/student/code-enroll`,
     method: "POST",
     headers: {
       'mysession': sessiondata,

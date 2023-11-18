@@ -21,19 +21,19 @@ function getSessionTeacherId() {
     hashdata = localStorage.getItem("myhash");
     // Make an AJAX GET request to fetch the teacher's ID from the session
     $.ajax({
-        url: "http://"+hostaddr+"/session/get-session-data", // Replace with your backend API endpoint
+        url: "https://"+hostaddr+"/session/get-session-data", // Replace with your backend API endpoint
         method: "GET",
         async: false, // Synchronous request to wait for the response
         headers: {
             'mysession': sessiondata,
             'Authorization': 'Basic ' + hashdata
-            },
+        },
         success: function (data) {
             teacherid = data; // Store the teacher's ID
-            },
+        },
         error: function () {
             console.error("Error fetching teacher ID");
-            },
+        },
     });
     return teacherid;
 }
@@ -42,7 +42,7 @@ var tid = getSessionTeacherId();
 console.log(tid);
 // Make an AJAX request to fetch the teacher's data
 $.ajax({
-    url: "http://"+hostaddr+"/teacher/sheets", // Replace with your backend API endpoint
+    url: "https://"+hostaddr+"/teacher/sheets", // Replace with your backend API endpoint
     method: "GET",
     async: false, // Synchronous request to wait for the response
     headers: {
@@ -56,14 +56,14 @@ $.ajax({
 
         const currentDate = new Date();
         const options = { timeZone: 'Asia/Dhaka', year: 'numeric', month: '2-digit', day: '2-digit' };
-        
+
         console.log(teacherCourses);
         const hidToMatch = hid;
         for (const course of teacherCourses) {
             if (course.hid == hidToMatch) {
                 document.getElementById('courseCode').textContent = course.department + " " + course.courseid + " " + course.section;
                 document.getElementById('courseName').textContent = course.coursename;
-        
+
                 // Format the date with the correct time zone
                 const formattedDateParts = currentDate.toLocaleDateString('en-US', options).split('/');
                 const formattedDate = `${formattedDateParts[2]}-${formattedDateParts[0].padStart(2, '0')}-${formattedDateParts[1].padStart(2, '0')}`;
@@ -71,13 +71,13 @@ $.ajax({
                 break;
             }
         }
-        
+
 
 
 
     },
-        error: function (error) {
-      // Handle any errors here
+    error: function (error) {
+        // Handle any errors here
         console.error("Error fetching teacher data:", error.responseText);
     },
 });
@@ -88,13 +88,13 @@ const attendanceData = {};
 
 refreshAttendanceList();
 
-document.getElementById("attDate").addEventListener("change" , refreshAttendanceList); 
+document.getElementById("attDate").addEventListener("change" , refreshAttendanceList);
 
 
 function refreshAttendanceList() {
     const attendanceDate = document.getElementById("attDate").value;
     $.ajax({
-        url: 'http://' + hostaddr + '/attendance/get-students',
+        url: 'https://' + hostaddr + '/attendance/get-students',
         method: 'GET',
         dataType: 'json',
         headers: {
@@ -134,11 +134,11 @@ function displayAttendanceData() {
 
     students = Object.keys(dataFromBackend);
 
-     // Initialize an object to store attendance data
-     
-     students.forEach((studentId) => {
-         const row = table.insertRow();
-         row.setAttribute("data-student-id", studentId);
+    // Initialize an object to store attendance data
+
+    students.forEach((studentId) => {
+        const row = table.insertRow();
+        row.setAttribute("data-student-id", studentId);
 
         // Display Student ID in the first column
         row.insertCell(0).textContent = studentId;
@@ -151,7 +151,7 @@ function displayAttendanceData() {
 
         const imgCell = row.insertCell(2);
         const img = document.createElement("img");
-        img.src = "http://"+hostaddr+"/student/get-photo/" + studentId;
+        img.src = "https://"+hostaddr+"/student/get-photo/" + studentId;
         img.classList.add("student-image");
         imgCell.appendChild(img);
 
@@ -197,7 +197,7 @@ function refreshTable() {
 
         const imgCell = row.insertCell(2);
         const img = document.createElement("img");
-        img.src = "http://" + hostaddr + "/student/get-photo/" + studentId;
+        img.src = "https://" + hostaddr + "/student/get-photo/" + studentId;
         img.classList.add("student-image");
         imgCell.appendChild(img);
 
@@ -233,7 +233,7 @@ function submitAttendanceData() {
     const attendanceDate = document.getElementById("attDate").value;
 
     $.ajax({
-        url: 'http://' + hostaddr + '/attendance/submit-attendance/' + hid + '?attendanceDate=' + attendanceDate,
+        url: 'https://' + hostaddr + '/attendance/submit-attendance/' + hid + '?attendanceDate=' + attendanceDate,
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(attendanceData),
@@ -278,7 +278,7 @@ toggleImagesButton.addEventListener('click', function () {
 
             // Create an image element
             const img = document.createElement("img");
-            img.src = "http://" + hostaddr + "/student/get-photo/" + studentId;
+            img.src = "https://" + hostaddr + "/student/get-photo/" + studentId;
             img.classList.add("student-image");
             card.appendChild(img);
 

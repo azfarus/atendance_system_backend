@@ -6,7 +6,7 @@
 // sessiondata = localStorage.getItem("mysession");
 // hashdata = localStorage.getItem("myhash");
 // $.ajax({
-//   url: "http://"+hostaddr+"/student/departments", // Replace with your backend API endpoint for departments
+//   url: "https://"+hostaddr+"/student/departments", // Replace with your backend API endpoint for departments
 //   method: "GET",
 //     headers: {
 //       'mysession': sessiondata,
@@ -34,7 +34,7 @@
 // allCoursesList = {};
 
 // $.ajax({
-//     url: "http://"+hostaddr+"/student/courses_info",
+//     url: "https://"+hostaddr+"/student/courses_info",
 //     type: "GET",
 //     headers: {
 //         'mysession': sessiondata,
@@ -66,7 +66,7 @@
 
 //     // Fetch course data from the backend based on the selected department
 // $.ajax({
-//     url: "http://" + hostaddr + "/course/get-course-by-dept",
+//     url: "https://" + hostaddr + "/course/get-course-by-dept",
 //     method: "GET",
 //     headers: {
 //         'mysession': sessiondata,
@@ -85,7 +85,7 @@
 
 //             // Extract course code from the course name
 //             const [, courseCode] = /(\d+)/.exec(course.name) || [];
-            
+
 //             option.textContent = courseCode; // Set course code as text content
 
 //             option.onclick = function () {
@@ -105,12 +105,12 @@
 
 // function getSessionStudentId() {
 //     var studentid = null;
-  
+
 //     sessiondata = localStorage.getItem("mysession");
 //     hashdata = localStorage.getItem("myhash");
 //     // Make an AJAX GET request to fetch the Student's ID from the session
 //     $.ajax({
-//       url: "http://"+hostaddr+"/session/get-session-data", // Replace with your backend API endpoint
+//       url: "https://"+hostaddr+"/session/get-session-data", // Replace with your backend API endpoint
 //       method: "GET",
 //       async: false, // Synchronous request to wait for the response
 //       headers: {
@@ -124,7 +124,7 @@
 //         console.error("Error fetching Student ID");
 //       },
 //     });
-  
+
 //     return studentid;
 //   }
 
@@ -133,11 +133,11 @@
 //             function changeTitle(newTitle, dropdownId) {
 //                 document.getElementById(dropdownId).textContent = newTitle;
 //             }
-            
+
 //             sessiondata = localStorage.getItem("mysession");
 //             hashdata = localStorage.getItem("myhash");
 //             getID = getSessionStudentId();
-    
+
 //             // JavaScript function to add selected items to the "Selected Items" division
 //             function btn() {
 //                 const selectedItems = document.querySelectorAll('.selected-item');
@@ -149,7 +149,7 @@
 //                     const courseInfo = item.textContent;
 //                     const courseInfoWithoutRemove = courseInfo.replace('Remove', '');
 //                     courses.push(courseInfoWithoutRemove);
-                    
+
 //                 });
 
 //                 courses.forEach(course => {
@@ -160,7 +160,7 @@
 //                 sessiondata = localStorage.getItem("mysession");
 //                 hashdata = localStorage.getItem("myhash");
 //                 $.ajax({
-//                     url: "http://"+hostaddr+"/course/register", // Replace with your backend API endpoint for course registration
+//                     url: "https://"+hostaddr+"/course/register", // Replace with your backend API endpoint for course registration
 //                     method: "POST",
 //                     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 //                     headers: {
@@ -192,15 +192,15 @@
 //             function selectItem() {
 //                 const departmentValue = document.getElementById('dropbtn').textContent;
 //                 const offeredCoursesValue = document.getElementById('dropbtn3').textContent;
-            
+
 //                 if (departmentValue === 'Department' || offeredCoursesValue === 'Offered courses') {
 //                     // Display an alert and return without adding the item
 //                     alert('Please select both department and course.');
 //                     return;
 //                 }
-            
+
 //                 const selectedItems = document.querySelectorAll('.selected-item');
-            
+
 //                 // Check if the selected course is already in the list
 //                 let isDuplicate = false;
 //                 selectedItems.forEach(item => {
@@ -212,7 +212,7 @@
 //                         alert('Course already selected');
 //                     }
 //                 });
-            
+
 //                 if (!isDuplicate) {
 //                     const selectedItemsDiv = document.getElementById('selected-items');
 //                     const department = document.getElementById('dropbtn').textContent;
@@ -225,11 +225,11 @@
 //                             break; // Exit the loop once a match is found
 //                         }
 //                     }
-            
+
 //                     const selectedItem = document.createElement('div');
 //                     selectedItem.className = 'selected-item';
 //                     selectedItem.textContent = courseInfo;
-            
+
 //                     const removeButton = document.createElement('button');
 //                     removeButton.className = 'remove-button';
 //                     removeButton.textContent = 'Remove';
@@ -238,10 +238,10 @@
 //                         // Re-add the event listener to the "Select" button
 //                         document.getElementById('select-button').addEventListener('click', selectItem);
 //                     });
-            
+
 //                     selectedItem.appendChild(removeButton);
 //                     selectedItemsDiv.appendChild(selectedItem);
-            
+
 //                     // Remove the event listener after adding the item
 //                     document.getElementById('select-button').removeEventListener('click', selectItem);
 //                     document.getElementById('dropbtn3').textContent = "Offered courses";

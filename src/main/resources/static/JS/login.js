@@ -28,7 +28,7 @@ $('#loginButton').click(function() {
             'Authorization': 'Basic ' + hash
         },
 
-        
+
         success: function(data) {
             localStorage.setItem("mysession" , data);
             localStorage.setItem("myhash" , hash);
@@ -76,17 +76,17 @@ $(document).ready(function () {
         // Your reset password logic here
         id=document.getElementById("forgotPasswordEmail").value;
 
-        
+
         $.ajax({
             type: 'POST',
-            url: 'http://'+hostaddr+'/forgotpass/request-change',
+            url: 'https://'+hostaddr+'/forgotpass/request-change',
             contentType: 'application/x-www-form-urlencoded',
             data: {
                 id:id
             },
-            
-    
-            
+
+
+
             success: function(data) {
                 alert('YES YES YES');
             },
@@ -95,6 +95,6 @@ $(document).ready(function () {
                 alert('Login failed. Please check your credentials.');
             }
         });
-        
+
     });
 });

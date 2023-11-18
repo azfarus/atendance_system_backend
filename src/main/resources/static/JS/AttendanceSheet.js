@@ -17,19 +17,19 @@ function getSessionTeacherId() {
     hashdata = localStorage.getItem("myhash");
     // Make an AJAX GET request to fetch the teacher's ID from the session
     $.ajax({
-        url: "http://"+hostaddr+"/session/get-session-data", // Replace with your backend API endpoint
+        url: "https://"+hostaddr+"/session/get-session-data", // Replace with your backend API endpoint
         method: "GET",
         async: false, // Synchronous request to wait for the response
         headers: {
             'mysession': sessiondata,
             'Authorization': 'Basic ' + hashdata
-            },
+        },
         success: function (data) {
             teacherid = data; // Store the teacher's ID
-            },
+        },
         error: function () {
             console.error("Error fetching teacher ID");
-            },
+        },
     });
     return teacherid;
 }
@@ -38,7 +38,7 @@ var tid = getSessionTeacherId();
 console.log(tid);
 // Make an AJAX request to fetch the teacher's data
 $.ajax({
-    url: "http://"+hostaddr+"/teacher/sheets", // Replace with your backend API endpoint
+    url: "https://"+hostaddr+"/teacher/sheets", // Replace with your backend API endpoint
     method: "GET",
     async: false, // Synchronous request to wait for the response
     headers: {
@@ -49,21 +49,21 @@ $.ajax({
         teacherId: tid
     },
     success: function (teacherCourses) {
-    console.log(teacherCourses);
-    const hidToMatch = hid;
-    for (const course of teacherCourses) {
-        if (course.hid == hidToMatch) {
-            globalcourse = course.department + course.courseid + course.section;
-            document.getElementById('courseCode').textContent = course.department +" "+ course.courseid +" "+course.section;
-            document.getElementById('courseName').textContent = course.coursename;
-            document.getElementById('count').textContent = course.count;
-            document.getElementById('percentage').textContent = course.percentage;
-            break;
+        console.log(teacherCourses);
+        const hidToMatch = hid;
+        for (const course of teacherCourses) {
+            if (course.hid == hidToMatch) {
+                globalcourse = course.department + course.courseid + course.section;
+                document.getElementById('courseCode').textContent = course.department +" "+ course.courseid +" "+course.section;
+                document.getElementById('courseName').textContent = course.coursename;
+                document.getElementById('count').textContent = course.count;
+                document.getElementById('percentage').textContent = course.percentage;
+                break;
+            }
         }
-    }
     },
-        error: function (error) {
-      // Handle any errors here
+    error: function (error) {
+        // Handle any errors here
         console.error("Error fetching teacher data:", error.responseText);
     },
 });
@@ -71,31 +71,31 @@ $.ajax({
 document.getElementById("att_percentage").addEventListener("change",()=>{
     document.getElementById("studentList").innerHTML="";
     percentage_input = document.getElementById("att_percentage").value;
-    
+
     if(percentage_input > 100 || percentage_input < 0) alert("Invalid Percentage");
     else fetchStudentIds(percentage_input);
-    
+
 });
 
 function loadPrevAttendance() {
     const table = document.getElementById("attendance-table");
     const students = Object.keys(dataFromBackend);
-    
+
     // Get the existing table row by its id
     const headerRow = document.getElementById("start-row");
     const headerCell = document.createElement("th");
     headerCell.textContent = "Student ID";
     headerRow.appendChild(headerCell);
-    
+
     const headers = dataFromBackend["start"];
-    
+
     // Populate the table header row with headers
     headers.forEach(headerText => {
         const headerCell = document.createElement("th");
         headerCell.textContent = headerText;
         headerRow.appendChild(headerCell);
     });
-    
+
     const selectElement = document.getElementById("selectID");
     students.filter(student => student !== "start").forEach((student) => {
         const option = document.createElement("option");
@@ -106,19 +106,19 @@ function loadPrevAttendance() {
 
         const row = table.insertRow();
         row.insertCell(0).textContent = student;
-        
+
         const attendanceData = dataFromBackend[student];
         for (let i = 0; i < attendanceData.length ; i++) {
             const cell = row.insertCell(i + 1);
-                cell.textContent = attendanceData[i];
-                cell.style.fontWeight = "600";
-                if(attendanceData[i]=="A"){
-                    cell.style.backgroundColor = "rgba(255, 0, 0, 0.224)";
-                }
-                else if(attendanceData[i]=="L"){
-                    cell.style.backgroundColor = "rgba(255, 238, 0, 0.384)";
-                }
+            cell.textContent = attendanceData[i];
+            cell.style.fontWeight = "600";
+            if(attendanceData[i]=="A"){
+                cell.style.backgroundColor = "rgba(255, 0, 0, 0.224)";
             }
+            else if(attendanceData[i]=="L"){
+                cell.style.backgroundColor = "rgba(255, 238, 0, 0.384)";
+            }
+        }
     });
 }
 
@@ -128,7 +128,7 @@ var studentIDs = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     $.ajax({
-        url: "http://"+hostaddr+"/attendance/prev-attendance/"+hid, // Replace with your backend API endpoint
+        url: "https://"+hostaddr+"/attendance/prev-attendance/"+hid, // Replace with your backend API endpoint
         method: "GET",
         async: false, // Synchronous request to wait for the response
         headers: {
@@ -143,12 +143,12 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log(dataFromBackend);
             loadPrevAttendance();
         },
-            error: function (error) {
-          // Handle any errors here
+        error: function (error) {
+            // Handle any errors here
             console.error("Error fetching teacher data:", error.responseText);
         },
     });
-    
+
     document.getElementById("studentList").innerHTML="";
     fetchStudentIds(85);
 });
@@ -195,7 +195,7 @@ function populateStudentIDs() {
             const studentID = document.createElement("div");
             studentID.className = "student-id";
             studentID.textContent = studentIDs[i];
-    
+
             studentList.appendChild(studentID);
         }
     }
@@ -211,13 +211,13 @@ function fetchStudentIds(percentage){
 
     $.ajax({
         type: "GET",
-        url: "http://"+hostaddr+"/attendance/get-defaulters/"+hid+"/"+percentage,
+        url: "https://"+hostaddr+"/attendance/get-defaulters/"+hid+"/"+percentage,
         headers: {
             'mysession': sessiondata,
             'Authorization': 'Basic ' + hashdata
         },
         success: function(response) {
-            
+
             studentIDs = response;
             populateStudentIDs()
             //alert("got the defaulters.");
@@ -234,13 +234,13 @@ function emailBtnfunc() {
     hashdata = localStorage.getItem("myhash");
     $.ajax({
         type: "POST",
-        url: "http://"+hostaddr+"/attendance/send-warning/"+hid,
+        url: "https://"+hostaddr+"/attendance/send-warning/"+hid,
         headers: {
             'mysession': sessiondata,
             'Authorization': 'Basic ' + hashdata,
             'Content-Type':'application/json'
         },
-        
+
         data: JSON.stringify(studentIDs),
         success: function(response) {
             alert("Warning emails sent successfully.");
@@ -265,7 +265,7 @@ function sheetSubmitBtn() {
             rowData.push(col.textContent);
         });
         if (rowData.length > 0) {
-        csvContent += rowData.join(",") + "\n";
+            csvContent += rowData.join(",") + "\n";
         }
     });
 
@@ -331,7 +331,7 @@ function reportBtnfunc(attPercentage) {
 
 function registerStudents(studentId , failed) {
     $.ajax({
-        url: 'http://'+hostaddr+'/teacher/course-register'//samnun url
+        url: 'https://'+hostaddr+'/teacher/course-register'//samnun url
         ,
         method: 'POST',
         //dataType: 'application/x-www-form-urlencoded',
@@ -344,12 +344,12 @@ function registerStudents(studentId , failed) {
             hid: hid,
         },
         success: function(data) {
-            
+
         },
         error: function(data) {
             alert("Couldnt register "+ JSON.stringify(data));
         }
-        
+
     });
 }
 
@@ -367,11 +367,11 @@ function csvSubmit() {
 
 function handleFileSelect(event) {
     const file = event.target.files[0];
-    
+
     if (file) {
         // Read the CSV file
         const reader = new FileReader();
-        
+
         reader.onload = function (e) {
             const csvData = e.target.result;
 
@@ -415,11 +415,11 @@ $('#deleteBtn').on('click', function () {
     }
     else
         isConfirmed = window.confirm(`Are you sure you want to delete ${selectedStudentID} ?` );
-    
+
     if (isConfirmed) {
         $.ajax({
             type: 'DELETE',
-            url: 'http://'+hostaddr+'/attendance/delete-student',
+            url: 'https://'+hostaddr+'/attendance/delete-student',
             headers: {
                 'mysession': sessiondata,
                 'Authorization': 'Basic ' + hashdata
