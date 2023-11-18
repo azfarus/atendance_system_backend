@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated() // Requires authentication for any other request
                 .and()
                 .httpBasic().and().csrf().disable();
-        http.cors(); // Enable CORS support
+       http.cors(); // Enable CORS support
 
         // Other security configurations
     }
@@ -85,10 +85,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://127.0.0.1:5501"); // Allow requests from any origin (not recommended for production)
+        //configuration.addAllowedOrigin("http://127.0.0.1:5501"); // Allow requests from any origin (not recommended for production)
 //        configuration.addAllowedOrigin("http://192.168.1.72:5501"); // Allow requests from any origin (not recommended for production)
-       // configuration.addAllowedOrigin("*");
-        configuration.addAllowedMethod("*"); // Allow all HTTP methods
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("POST");
+        configuration.addAllowedMethod("GET");
+        configuration.addAllowedMethod("DELETE");// Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(false); // Allow credentials (e.g., cookies)
 
