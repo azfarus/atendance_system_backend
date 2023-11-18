@@ -33,6 +33,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/login")
+@CrossOrigin("*")
 public class LoginController {
 
     @Autowired
