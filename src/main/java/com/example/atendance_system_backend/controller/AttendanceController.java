@@ -212,20 +212,25 @@ public class AttendanceController {
 
     @DeleteMapping("/delete-student")
     @ResponseBody
-    private ResponseEntity<String> delete_stud(@RequestParam Long hid , @RequestParam Long stud_id){
-
-        courseregDB.deleteById(new StudentCourseIdClass(stud_id , hid));
-        return ResponseEntity.status(HttpStatus.OK).body("DELETED");
+    private ResponseEntity<String> delete_stud(@RequestParam Long hid, @RequestParam Long stud_id) {
+        try {
+            if (stud_id == 0) {
+                // If stud_id is 0, delete all students for the given course
+                courseregDB.deleteStudentTakesCourseByCourseHid(hid);
+                return ResponseEntity.status(HttpStatus.OK).body("DELETED_ALL");
+            } else {
+                // Delete the specified student for the given course
+                courseregDB.deleteById(new StudentCourseIdClass(stud_id, hid));
+                return ResponseEntity.status(HttpStatus.OK).body("DELETED_SINGLE");
+            }
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("ERROR");
+        }
     }
 
 
-    @DeleteMapping("/delete-all-student")
-    @ResponseBody
-    private ResponseEntity<String> delete_all_stud(@RequestParam Long hid ){
-
-        courseregDB.deleteStudentTakesCourseByCourseHid(hid);
-        return ResponseEntity.status(HttpStatus.OK).body("DELETED");
-    }
     @GetMapping("/prev-attendance/{hid}")
     @ResponseBody
     private ResponseEntity<ObjectNode> prev_attendance( @PathVariable Long hid) throws JsonProcessingException {
