@@ -321,6 +321,7 @@ function displayCourses(courses) {
     });
   } else {
     const message = document.createElement('p');
+    message.className = 'message';
     message.textContent = 'No courses found for the student.';
     courseList.appendChild(message);
   }

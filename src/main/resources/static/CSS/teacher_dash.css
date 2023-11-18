@@ -11,8 +11,8 @@
 html {
   font-size: 10px;
   font-family: "Josefin Sans", sans-serif;
-  min-width: 65rem;
-  background: linear-gradient(#ffffff, #e5e5e5);
+  min-width: 75rem;
+  background: linear-gradient(#ffffff, #fcfcfc);
 }
 
 :root {

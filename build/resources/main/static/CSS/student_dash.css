@@ -11,8 +11,8 @@
 html {
   font-size: 10px;
   font-family: "Josefin Sans", sans-serif;
-  min-width: 65rem;
-  background: linear-gradient(#ffffff, #e5e5e5);
+  min-width: 100rem;
+  background: linear-gradient(#ffffff, #fcfcfc);
 }
 
 :root {
@@ -410,6 +410,20 @@ a {
   cursor: pointer;
   box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.268);
 }
+
+.message {
+  color: #333; /* Text color */
+  background-color: #f8f8f8; /* Background color */
+  padding: 10px; /* Padding around the text */
+  border: 1px solid #ddd; /* Border style */
+  border-radius: 5px; /* Rounded corners */
+  margin-top: 25px; /* Margin at the top for spacing */
+  font-family: 'Arial', sans-serif; /* Font family */
+  font-size: 18px; /* Font size */
+  text-align: center; /* Center the text */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle lift */
+}
+
 
 #enrollmentSubmit:hover {
   background-color: #45a049;
