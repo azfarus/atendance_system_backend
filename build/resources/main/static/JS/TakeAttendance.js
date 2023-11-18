@@ -231,6 +231,7 @@ function toggleAttendance(event) {
 // Function to submit attendance data
 function submitAttendanceData() {
     const attendanceDate = document.getElementById("attDate").value;
+    console.log(attendanceDate);
 
     $.ajax({
         url: 'https://' + hostaddr + '/attendance/submit-attendance/' + hid + '?attendanceDate=' + attendanceDate,
@@ -255,7 +256,6 @@ function submitAttendanceData() {
 // Attach a click event handler to a submit button
 document.getElementById("sheetSubmitBtn").addEventListener("click", submitAttendanceData);
 
-// ... (your existing code)
 
 const toggleImagesButton = document.getElementById('toggleImages');
 let cardsVisible = false;
@@ -318,4 +318,3 @@ toggleImagesButton.addEventListener('click', function () {
     }
 });
 
-// ... (your existing code)
