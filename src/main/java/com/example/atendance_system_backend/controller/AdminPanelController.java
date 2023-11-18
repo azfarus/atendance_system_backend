@@ -26,7 +26,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin("*")
 public class AdminPanelController {
 
     @Autowired

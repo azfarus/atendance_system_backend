@@ -96,7 +96,6 @@ public class AttendanceController {
 
     @PostMapping("/submit-attendance/{hid}")
     @ResponseBody
-    @CrossOrigin("*")
     private ResponseEntity<String> submit_attendance(
             @RequestBody Map<String, String> attendanceMap,
             @PathVariable Long hid,

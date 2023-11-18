@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+
 @RequestMapping("/course")
 public class CourseRegistrationController {
     // an api to get the courses based on departments

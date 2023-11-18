@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/forgotpass")
-@CrossOrigin("*")
+
 public class ForgotPassController {
 
     @Autowired

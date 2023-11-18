@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/session")
-@CrossOrigin("*")
+
 public class SessionController {
 
 

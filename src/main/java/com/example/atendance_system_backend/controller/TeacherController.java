@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
 
-@CrossOrigin("*")
+
 @RestController
 @RequestMapping("/teacher")
 public class TeacherController {
