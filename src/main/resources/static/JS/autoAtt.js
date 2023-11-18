@@ -43,7 +43,7 @@ var tid = getSessionTeacherId();
 console.log(tid);
 // Make an AJAX request to fetch the teacher's data
 $.ajax({
-    url: "https://"+hostaddr+":8081/teacher/sheets", // Replace with your backend API endpoint
+    url: "https://"+hostaddr+"/teacher/sheets", // Replace with your backend API endpoint
     method: "GET",
     async: false, // Synchronous request to wait for the response
     headers: {
@@ -82,7 +82,7 @@ const formattedDateParts = currentDate.toLocaleDateString('en-US', options).spli
 const formattedDate = `${formattedDateParts[2]}-${formattedDateParts[0].padStart(2, '0')}-${formattedDateParts[1].padStart(2, '0')}`;
 
 $.ajax({
-    url: 'https://'+hostaddr+':8081/attendance/get-students',
+    url: 'https://'+hostaddr+'/attendance/get-students',
     method: 'GET',
     dataType: 'json',
     headers: {
@@ -146,7 +146,7 @@ function displayAttendanceData() {
         console.log(formattedDate);
 
         $.ajax({
-            url: 'https://'+hostaddr+':8081/attendance/submit-attendance/'+hid + '?attendanceDate=' + formattedDate, // Replace with your API endpoint
+            url: 'https://'+hostaddr+'/attendance/submit-attendance/'+hid + '?attendanceDate=' + formattedDate, // Replace with your API endpoint
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(attendanceData),
