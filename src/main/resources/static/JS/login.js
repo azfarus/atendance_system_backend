@@ -21,7 +21,7 @@ $('#loginButton').click(function() {
     let hash = btoa(id + ":" + password);
     $.ajax({
         type: 'POST',
-        url: 'http://'+hostaddr+'/login/'+userType,
+        url: 'https://'+hostaddr+'/login/'+userType,
         contentType: 'application/json',
         data: JSON.stringify(requestBody),
         headers:{
