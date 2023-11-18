@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://127.0.0.1:5501"); // Allow requests from any origin (not recommended for production)
 //        configuration.addAllowedOrigin("http://192.168.1.72:5501"); // Allow requests from any origin (not recommended for production)
-        configuration.addAllowedOrigin("*");
+       // configuration.addAllowedOrigin("*");
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(false); // Allow credentials (e.g., cookies)
