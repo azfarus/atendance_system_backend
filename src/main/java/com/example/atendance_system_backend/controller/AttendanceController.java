@@ -205,6 +205,8 @@ public class AttendanceController {
         if(tchr.isPresent() && course.isPresent()){
             tchr.get().getCourse().remove(course.get());
             teacherDB.save(tchr.get());
+            course.get().getTeacher().remove(tchr.get());
+            courseDB.save(course.get());
             return ResponseEntity.status(HttpStatus.OK).body("UNENROLLED");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FAILED");
@@ -216,11 +218,13 @@ public class AttendanceController {
         try {
             if (stud_id == 0) {
                 // If stud_id is 0, delete all students for the given course
-                courseregDB.deleteStudentTakesCourseByCourseHid(hid);
+                courseregDB.deleteAll(courseregDB.findAllByCourseHid(hid));
+                attendanceDB.deleteAll(attendanceDB.findAttendanceByCourseHid(hid));
                 return ResponseEntity.status(HttpStatus.OK).body("DELETED_ALL");
             } else {
                 // Delete the specified student for the given course
                 courseregDB.deleteById(new StudentCourseIdClass(stud_id, hid));
+                attendanceDB.deleteAll(attendanceDB.findAttendanceByStudentIdAndCourseHid(stud_id , hid));
                 return ResponseEntity.status(HttpStatus.OK).body("DELETED_SINGLE");
             }
         } catch (Exception e) {

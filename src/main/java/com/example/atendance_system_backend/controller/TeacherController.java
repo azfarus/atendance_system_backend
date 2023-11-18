@@ -1,6 +1,7 @@
 package com.example.atendance_system_backend.controller;
 
 
+import com.example.atendance_system_backend.attendance.AttendanceRepository;
 import com.example.atendance_system_backend.course.Course;
 import com.example.atendance_system_backend.course.CourseRepository;
 import com.example.atendance_system_backend.coursereg.StudentTakesCourse;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 @CrossOrigin
@@ -64,6 +66,9 @@ public class TeacherController {
     @Autowired
     GmailEmailSender gmailEmailSender;
 
+
+    @Autowired
+    AttendanceRepository attendanceDB;
     @GetMapping("/info")
     @ResponseBody
     private ResponseEntity<ObjectNode> info(@RequestParam(name = "teacherid") Long id , HttpServletRequest hsr){
@@ -155,6 +160,10 @@ public class TeacherController {
         List<ObjectNode> result = new ArrayList<>();
 
         for( Course x : courses){
+
+            Double att_perc =  attendanceDB.countAttendanceByCourseHidAndStatusNotContains(x.getHid() , "A")/(double)attendanceDB.countAttendanceByCourseHid(x.getHid());
+
+            if(att_perc.isNaN() ) att_perc=0.0;
             ObjectNode teacher = mapper.createObjectNode();
             teacher.put("hid" , x.getHid());
             teacher.put("coursename" , x.getCourseName());
@@ -162,6 +171,11 @@ public class TeacherController {
             teacher.put("department" , x.getDepartment());
             teacher.put("section" , x.getSection().toString());
             teacher.put("code" , obfuscate(x.getHid()));
+            teacher.put("count" , regDB.countStudentTakesCourseByCourseHid(x.getHid()));
+
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+            teacher.put("percentage" , decimalFormat.format(att_perc*100)+"%"  );
 
             result.add(teacher);
         }

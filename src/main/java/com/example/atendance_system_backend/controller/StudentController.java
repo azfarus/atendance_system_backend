@@ -219,7 +219,7 @@ public class StudentController {
     private ResponseEntity<String> code_enroll(@RequestParam String sheetcode , @RequestParam Long stud_id ) throws Exception {
         Long hid = deobfuscate(sheetcode);
 
-
+        System.out.println("enrolling to " + hid);
         if(courseDB.existsById(hid) && studentDB.existsById(stud_id)){
 
             Optional<Course> c = courseDB.findById(hid);

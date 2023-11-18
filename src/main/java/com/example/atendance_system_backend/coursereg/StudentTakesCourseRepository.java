@@ -10,5 +10,7 @@ public interface StudentTakesCourseRepository extends JpaRepository<StudentTakes
 
     void deleteStudentTakesCourseByCourseHid(Long hid);
 
+    Long countStudentTakesCourseByCourseHid(Long hid);
+
     List<StudentTakesCourse> findByStudentId(Long sid);
 }
