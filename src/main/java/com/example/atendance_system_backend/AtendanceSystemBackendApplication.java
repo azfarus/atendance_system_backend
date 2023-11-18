@@ -14,7 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 
 //exclude = {SecurityAutoConfiguration.class }
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 @EnableAsync
 public class AtendanceSystemBackendApplication {
 

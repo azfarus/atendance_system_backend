@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Login - Attendance Management System</title>
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./CSS/login.css">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 login-left vertical-center" id="design">
+                    <div class="brand">
+                        <div class="stems">
+                            Student <br>Attendance <br> System
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 login-right vertical-center">
+                    <div class="container">
+                        <div class="row">
+                            <!-- Add a new div for the forgot password form -->
+<div class="col align-self-start">
+    <div class="login-form" id="loginForm">
+        <div class="text-center">
+            <h1 class="my-4"> LOGIN </h1>
+        </div>
+        <form>
+            <!-- Your existing login form code here -->
+            <div class="form-group">
+                <select class="form-control" id="userType">
+                    <option value="student">STUDENT</option>
+                    <option value="teacher">TEACHER</option>
+                    <option value="admin">ADMIN</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="email" placeholder="ID" required>
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <center>
+                    <button type="button" class="btn btn-primary btn-lg btn-block text-center" id="loginButton">LOGIN</button>
+                </center>
+                <div class="forgot"> <a href="#" id="forgotPasswordLink">Forgot password ?</a></div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Add a new div for the forgot password form and hide it initially -->
+    <div class="login-form" id="forgotPasswordForm" style="display: none;">
+        <div class="text-center">
+            <h2 class="my-4"> FORGOT PASSWORD </h2>
+        </div>
+        <form>
+            <!-- Only include the email field for the forgot password form -->
+            <div class="form-group">
+                <input type="number" class="form-control" id="forgotPasswordEmail" placeholder="Your ID" required>
+                <center>
+                    <button type="button" class="btn btn-primary btn-lg btn-block text-center" id="resetPasswordButton">RESET PASSWORD</button>
+                    <div class="forgot"> <a href="#" id="backToLoginLink">Back to login</a></div>
+                </center>
+            </div>
+        </form>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="square s1"></div>
+            <div class="square s2"></div>
+            <div class="square s3"></div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="./JS/login.js"></script>
+    </body>
+</html>

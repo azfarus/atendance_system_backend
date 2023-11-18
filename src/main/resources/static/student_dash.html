@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./CSS/student_dash.css">
+    <link rel="stylesheet" href="./CSS/courseReg.css">
+</head>
+    <body>
+        <div>
+            <ul class="nav navbar-nav">
+                <li>&nbsp;</li>
+                <li class="text-center"><h2 class="nav-text text-center pl-5 ml-5 mb-3 display-4 text-light"><b>STUDENT DASHBOARD</b></h2></li>
+                <li class="text-right"><div class="logout-container">
+                    <a class="mr-5" id="logoutButton" href="login.html">
+                        <img class="mb-3" src="./images/logout.jpg" alt="Logout">
+                    </a>
+            </div></li>
+            </ul>
+        </div>
+        <div class="container_main">
+            <div class="p_container">
+                <div class="sidebar">
+                    <center>
+                        <img class="circular--square" src ="images/pp.jpg" id="profilePicture" style="width:260px;height:260px;"><br><br>
+                    </center>
+                    <div class="p2_container">
+                        <h2 id="s_name">Student Name</h2>
+                        <h2 id="s_id">Student ID</h2>
+                        <h2 id="s_mail">mail@gmail.com</h2>
+                    </div>
+                    <br>
+                    <ul>
+                        <li class="active" data-target="#attendanceChartSection">ATTENDANCE CHART</li>
+                        <li data-target="#myProfileSection">UPDATE PROFILE</li>
+                        <!-- <li data-target="#courseRegSection">COURSE REGISTRATION</li> -->
+                        <li data-target="#RegSection">ENROLLED COURSES</li>
+                    </ul>
+                </div>
+                <div class="main">
+                    <div class="section active" id="attendanceChartSection">
+                        <h1>ATTENDANCE CHART</h1> <br>
+                        <center>
+                        <div id="attendanceChart">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        </center>
+                    </div>
+                    <div class="section" id="myProfileSection">
+                        <h1>STUDENT PROFILE UPDATE</h1> <br>
+                        <div id="myProfile">
+                            <form class="form_ctrl" id="updateStudentForm">                            
+                                <label for="email_student">Email Address:</label>
+                                <input class="form-control" type="email" id="email_student" name="email_student" required>
+                            
+                                <label for="address_student">Address:</label>
+                                <input class="form-control" type="text" id="address_student" name="address_student" required>
+                            
+                                <label for="phone_student">Phone Number:</label>
+                                <input class="form-control" type="text" id="phone_student" name="phone_student" maxlength="14" minlength="11" required>
+
+                                <div class="file-container text-center">
+                                    <input class="file-input" type="file" id="profile_image" name="profile_image" accept=".jpg, .jpeg, .png">
+                                </div>
+
+                                <button type="submit" id="updateProfileButton">UPDATE</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- <div class="section" id="courseRegSection">
+                            <div class="cReg">
+                                <h1>Course Registration</h1> <br><hr>
+                                <nav>
+                                    <div class="drop text-center">
+        
+                                        <ul class=" dropul text-center">
+                                            <li>
+                                                <div class="dropdown">
+                                                    <button id="dropbtn">Department</button>
+                                                    <div class="dropdown-content" id="department-dropdown">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li>
+                                                <div class="dropdown">
+                                                    <button id="dropbtn3">Offered Courses</button>
+                                                    <div class="dropdown-content" id="courses-dropdown">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </li>                                    
+                                        <button id="select-button" onclick = "selectItem('dropbtn1')">Select</button>
+                                    </ul>
+                                </div>
+                                </nav>
+                            </div>
+                            <div class="hh"><h1>Selected Courses:</h1> <br><hr></div>
+                            <div class="list-container" id="selected-items">
+                            </div>
+                            <center>
+                                <button type="submit" id="courseRegBtn" onclick="btn();">Register</button>
+                            </center>
+                    </div> -->
+                    <div class="section" id="RegSection">
+                        <h1>ENROLLED COURSES</h1> <br>
+                        <div id="enrollmentControls" style="text-align: center;">
+                            <input type="text" id="enrollmentInput" placeholder="Enter Course Code">
+                            <button id="enrollmentSubmit">Enroll</button>
+                        </div>
+                        <div id="myRegs">
+                            <ol id="courseList" class="course-list">
+                            </ol>
+                        </div>
+                    </div>
+                    
+                </div>
+        </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src = "./JS/student_dash.js"></script>
+        <script src = "./JS/courseReg.js"></script>
+        <!-- <script src="./JS/admin.js"></script> -->
+    </body>
+</html>

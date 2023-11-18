@@ -1,0 +1,431 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+/* Add a background image to the container element */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: 0.25s all ease;
+}
+
+html {
+  font-size: 10px;
+  font-family: "Josefin Sans", sans-serif;
+  min-width: 65rem;
+  background: linear-gradient(#ffffff, #e5e5e5);
+}
+
+:root {
+--primary-color: #1d1d1d;
+}
+
+.p_container {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  font-size: 1.5rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.p2_container {
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 5px;
+  font-size: 1.5rem;
+  font-family: "Poppins", sans-serif;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.675);
+  background-color: #ffffff7e;
+}
+.p2_container h2{
+  color: rgb(255, 253, 212);
+  list-style: none;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+/* Define the sidebar element and set its properties */
+.sidebar {
+  position: fixed;
+  margin-top: 7.2rem;
+  background-color: #bbdeffe2;
+  /* Different shade of blue for the sidebar */
+  color: #000000;
+  width: 30rem;
+  padding: 1rem;
+  height: 100vh;
+}
+
+/* Remove default list styling from sidebar unordered list */
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar h2 {
+  color: rgb(0, 0, 0);
+  list-style: none;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+
+#s_mail,#s_name, #s_id {
+  color: rgb(13, 50, 61);
+  font-size: 1.7rem;
+}
+
+/* Set styling for each item in sidebar unordered list */
+.sidebar li {
+    text-align: center;
+    padding: 1rem 0;
+    cursor: pointer;
+    font-size: 1.8rem;
+}
+
+
+.sidebar li.active {
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 0, 112);
+  border-left: #54b2ff solid 0.8rem;
+  border-radius: 0.5rem;
+  /*border: 1px solid black;*/
+}
+
+
+/* Define the main content area and set its properties */
+.main {
+  flex: 1;
+  padding: 4rem 2rem 4rem 32rem;
+}
+
+
+/* Hide all sections by default */
+.section {
+  display: none;
+}
+
+/* Show the active section */
+.section.active {
+  display: block;
+}
+
+/* Define styles for forms and form elements */
+.form_ctrl {
+  background: linear-gradient(#ffffff, rgba(252, 252, 252, 0.95));
+  padding: 4rem 8rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 70rem;
+  margin: auto;
+  margin-top: 2rem;
+  background-color: #ffffff45;
+  border-radius: 1rem;
+  box-shadow: 0.2rem 0.1rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+label {
+  margin-top: 1rem;
+}
+
+.form-control {
+  font-size: medium;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+  border: 1px solid #000000;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+}
+
+select {
+    padding: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid #000000;
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+  }
+
+
+#updateProfileButton:hover {
+    background-color: #cce5ff;
+    color: #003366;
+}
+
+#updateProfileButton {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  width: 20rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: #ddd;
+  background-color: #4d79ff;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0.5rem 0.6rem 0.8rem rgba(0, 0, 0, 0.268);
+}
+
+.container,
+.small-container,
+.medium-container {
+    width: 100%;
+  max-width: 130rem;
+  margin: auto;
+  padding: 0 2rem;
+}
+
+.small-container {
+  max-width: 100rem;
+}
+
+.medium-container {
+  max-width: 120rem;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.main {
+  margin-top: 7.3rem;
+}
+.main button {
+  font-size: 15px;
+}
+
+#myChart{
+  width: 80%;
+  height: auto;
+
+}
+
+.nav {
+  padding-top: 1.2rem;
+  width: 100%;
+  height: 7.2rem;
+  position: fixed;
+  line-height: 5rem;
+  background-color: #00256e;
+  justify-content: center;
+  z-index: 1;
+  color: rgb(44, 195, 233);
+}
+
+.circular--square { 
+  border-top-left-radius: 50% ; 
+  border-top-right-radius: 50%; 
+  border-bottom-right-radius: 50%; 
+  border-bottom-left-radius:50%;
+  margin-left: 3%;
+}
+
+
+#profilePicture {
+  width: 5rem;
+  height: 5rem;
+  margin-left: 3%;
+  margin-right: 3%;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  border: 2px solid #4d79ff;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+}
+
+  .logout-container a {
+    position: relative;
+    text-decoration: none;
+    margin-inline-end: 10rem;
+  }
+  
+  .logout-container img {
+    border-radius: 1%;
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+}
+
+  .course-list {
+    padding: 1px 5px;
+    margin: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 95%;
+    list-style-type: none; 
+  }
+
+  .course-info {
+    white-space: pre-wrap;
+  }
+  
+  
+  .course-item {
+    padding: 15px 35px;
+    margin-top: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    border-radius: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .course-item:hover {
+    background-color: rgb(244, 253, 255);
+  }
+  
+  .course-name {
+    font-size: 16px;
+    color: #333;
+    margin-right: 10px;
+  }
+  
+  .course-code {
+    font-size: 14px;
+    color: #777;
+  }
+  
+  
+
+  @media (max-width: 768px) {
+    .p_container {
+      flex-direction: column;
+      align-items: center;
+      min-height: 205vh;
+    }
+  
+    .circular--square{
+      margin: auto;
+      padding: auto;
+      display: block;
+    }
+  
+    .sidebar{
+      width: 100%;
+      padding: 1rem;
+      display: block;
+      position: relative;
+      height: fit-content;
+    }
+    .main{
+      padding: 2rem;
+    }
+  
+    .form_ctrl {
+      font-size: 1.2rem;
+    }
+
+    button{
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+
+  }
+
+  .file-container {
+    margin-top: 4rem;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .file-input {
+    font-size: 1.6rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    padding: 0.5rem 2rem;
+  }
+  
+  .file-input::before {
+    content: "Select Profile Picture";
+    display: inline-block;
+    color: black;
+    font-weight: 500;
+    font-size: 1.6rem;
+    text-align: center;
+    padding: 0.6rem 1rem;
+    white-space: nowrap;
+    cursor: pointer;
+    border-radius: 5rem;
+    transition: 0.25s;
+  }
+  
+  .file-input:hover::before {
+    background-color: #99ccff;
+    color: #003366;
+}
+
+.file-input:active {
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.file-input:hover {
+    background-color: #b3d9ff;
+    color: #003366;
+}
+
+#enrollmentControls {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+#enrollmentInput {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 30rem;
+}
+
+#enrollmentSubmit {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  width: 10rem;
+  padding: .8rem;
+  border-radius: .5rem;
+  border: #ddd;
+  background-color: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.268);
+}
+
+#enrollmentSubmit:hover {
+  background-color: #45a049;
+}
+
+  
+  ::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+
+  #myRegs{
+  text-align: center;
+  }
+
+  @media (max-width: 560px) {
+    .nav-text {
+      font-size: 26px;
+    }
+  }
