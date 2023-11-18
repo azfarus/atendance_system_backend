@@ -33,6 +33,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/student")
+@CrossOrigin
 public class StudentController {
     //check if request is a teaacher then send teacher information
 

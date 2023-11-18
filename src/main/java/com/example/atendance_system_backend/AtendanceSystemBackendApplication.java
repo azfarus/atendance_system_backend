@@ -12,7 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+
+//exclude = {SecurityAutoConfiguration.class }
+@SpringBootApplication
 @EnableAsync
 public class AtendanceSystemBackendApplication {
 
