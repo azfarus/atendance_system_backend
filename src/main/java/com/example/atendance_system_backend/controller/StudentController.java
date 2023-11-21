@@ -196,7 +196,7 @@ public class StudentController {
     @CrossOrigin
     @PostMapping("/update-data/{studid}")
     @ResponseBody
-    private ResponseEntity<String> update_data( @PathVariable Long studid , @RequestParam Long phonenumber , @RequestParam String email , @RequestParam String address , @RequestParam MultipartFile file) throws IOException {
+    private ResponseEntity<String> update_data( @PathVariable Long studid , @RequestParam Long phonenumber , @RequestParam String email , @RequestParam String address , @RequestParam(required = false) MultipartFile file) throws IOException {
 
 
         Optional<Student> s = studentDB.findStudentById(studid);
