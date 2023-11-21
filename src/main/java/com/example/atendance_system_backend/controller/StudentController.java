@@ -203,8 +203,7 @@ public class StudentController {
 
         if(s.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-        if(!upload_photo_func(file , studid)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
+        upload_photo_func(file , studid);
         s.get().setPhoneNumber(phonenumber);
         s.get().setAddress(address);
         s.get().setMail(email);
