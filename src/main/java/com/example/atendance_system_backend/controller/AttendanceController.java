@@ -105,9 +105,9 @@ public class AttendanceController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Course not found");
         }
 
-        System.out.println(hid);
+
         for (Map.Entry<String, String> entry : attendanceMap.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue());
+
             Attendance atd = new Attendance(
                     Long.parseLong(entry.getKey()),
                     attendanceDate,
@@ -134,7 +134,7 @@ public class AttendanceController {
         String message= "Your attendance percentage in your course : "+c.get().getCourseId()+" "+c.get().getCourseName()+" is below the required limit.";
 
         for(Long x : defaulters){
-            System.out.println(x);
+
             Optional<Student> s = studentDB.findStudentById(x);
             if(s.isEmpty()) continue;
             gmailEmailSender.sendEmail(s.get().getMail() , topic , message);
@@ -157,7 +157,7 @@ public class AttendanceController {
         for(StudentTakesCourse k :  studentsInCourse){
             Double percentVal = get_percentage_func(hid , k.getStudentId());
             if( percentVal>= 0 && percentVal < percentage )defaulters.add(k.getStudentId());
-            System.out.println("ID "+ k.getStudentId() +" Percentage "+percentVal);
+
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(defaulters);
@@ -290,7 +290,7 @@ public class AttendanceController {
 
             }
 
-            System.out.println(info);
+
 
 
 
