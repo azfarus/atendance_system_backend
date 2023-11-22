@@ -18,6 +18,7 @@ public class FileStorageService {
     private FileRepository fileDBRepository;
 
     public Long store(MultipartFile file) throws IOException {
+        if(file == null) return  (long)-1;
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         File myfile = new File(fileName, file.getContentType(), file.getBytes());
         fileDBRepository.save(myfile);

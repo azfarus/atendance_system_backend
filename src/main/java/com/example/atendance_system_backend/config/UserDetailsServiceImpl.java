@@ -37,12 +37,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<Teacher> teacher = teacherDB.findTeacherById(Long.parseLong(username));
         Optional<Student> student = student_db.findStudentById(Long.parseLong(username));
 
-        System.out.println("usrdts");
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 
         if(admin.isPresent()){
-            System.out.println("admin");
+
             Set<String> rolegula = new HashSet<>();
             rolegula.add("ADMIN");
             return new org.springframework.security.core.userdetails.User(
@@ -50,7 +50,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     getAuthorities("ADMIN"));
         }
         else if(teacher.isPresent()){
-            System.out.println("tchr");
+
             Set<String> rolegula = new HashSet<>();
             rolegula.add("TEACHER");
             return new org.springframework.security.core.userdetails.User(
@@ -58,7 +58,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     getAuthorities("TEACHER"));
         }
         else if(student.isPresent()){
-            System.out.println("stdnt");
+
             Set<String> rolegula = new HashSet<>();
             rolegula.add("STUDENT");
             return new org.springframework.security.core.userdetails.User(

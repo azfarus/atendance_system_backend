@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+        <link rel="stylesheet" href="./CSS/AttendanceSheet.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <title>Attendance Sheet</title>
+    </head>
+    <body>
+        <div>
+            <ul class="nav navbar-nav">
+                <li>&nbsp;</li>
+                <li class="text-center"><h2
+                        class="nav-text text-center pl-5 ml-5 mb-3 display-4 text-light"><b>ATTENDANCE SHEET</b></h2></li>
+                <li class="text-right">
+                    <div class="logout-container">
+                        <a class="mr-5" id="logoutButton"
+                            href="teacher_dash.html">
+                            <img class="mb-3" src="./images/back.jpg"
+                                alt="Logout">
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="p_container">
+            <div class="main">
+                <div class="text-center" id="sheetInfo">
+                    <div class="courseInfo">
+                        <div id="courseDiv">
+                            <h1 id="courseCode">Course Code</h1>
+                            <h1 id="courseName">Course Name</h1>
+                            <p class="cInfo">Total Students : <span id="count">Count</span></p>
+                            <p class="cInfo">Course Attendance : <span id="percentage">Percentage</span></p>
+                        </div>
+                        <div id="btnDiv">
+                            <div class="row">
+                                <button type="submit" id="sheetSubmitBtn" onclick="sheetSubmitBtn();">Generate Report</button>
+                            </div>
+                            <div class="row">
+                                <button type="submit" id="csvSubmitBtn" onclick="csvSubmit();">Upload Students</button>
+                            </div>
+                            <div class="row">
+                                <select id="selectID">
+                                    <option value="0">All Students</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                                <button type="submit" id="deleteBtn"><img class="icon" src="./images/delicon.png" alt="icon"></button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="belowInfo">
+                        <div class="above-attendance">
+                            <h1 id="belowAttHeading">BELOW ATTENDANCE
+                                <input type="number" id="att_percentage" value="85"></h1>
+                                <div style="display: flex; width: min-content;">
+                                    <button type="submit" id="reportBtn"><i class="fa-solid fa-file-csv fa-xl" style="color: #fafcff;"></i></button>
+                                    <button type="submit" id="emailBtn" onclick="emailBtnfunc();"> Send Mail </button>
+                                </div>
+                        </div>
+                        <div class="student-list" id="studentList">
+                            <!-- Student IDs with low attendance will be dynamically added here using JavaScript -->
+                        </div>
+                    </div>
+
+                </div>
+                <div id="table-container">
+                    <table id="attendance-table">
+                        <tr id="start-row">
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="./JS/AttendanceSheet.js"></script>
+    </body>
+</html>

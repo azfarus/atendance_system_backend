@@ -48,8 +48,8 @@ public class ForgotPassController {
     TokenTableRepository tk_DB;
 
 
-    String reset_endpoint="localhost:5501";
-    String server_endpoint="localhost";
+    String reset_endpoint="attendance.chromify.site";
+    String server_endpoint="atendancesystembackend-production.up.railway.app";
 
     @CrossOrigin
     @PostMapping("/request-change")
@@ -60,7 +60,7 @@ public class ForgotPassController {
 
 
         String token=StringHasher.hashString(id.toString() + Instant.now().toString());
-        String emailBody = "Click here to change your password: http://" + reset_endpoint + "/reset.html?token=" + token + "&server=" + server_endpoint;
+        String emailBody = "Click here to change your password: https://" + reset_endpoint + "/reset.html?token=" + token + "&server=" + server_endpoint;
 
         tk_DB.save(new TokenTable(id , token , Instant.now()));
 
@@ -81,13 +81,7 @@ public class ForgotPassController {
         return ResponseEntity.status(HttpStatus.OK).body("Check Email");
     }
 
-//    @CrossOrigin
-//    @PostMapping("/exec-change")
-//    @ResponseBody
-//    public  ResponseEntity<String> exec_change(@RequestBody LoginDTO stdnt_login_dto, HttpServletRequest hsr){
-//
-//
-//    }
+
 
     @CrossOrigin
     @PostMapping("/exec-change")

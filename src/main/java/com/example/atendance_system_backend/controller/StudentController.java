@@ -196,15 +196,14 @@ public class StudentController {
     @CrossOrigin
     @PostMapping("/update-data/{studid}")
     @ResponseBody
-    private ResponseEntity<String> update_data( @PathVariable Long studid , @RequestParam Long phonenumber , @RequestParam String email , @RequestParam String address , @RequestParam MultipartFile file) throws IOException {
+    private ResponseEntity<String> update_data( @PathVariable Long studid , @RequestParam Long phonenumber , @RequestParam String email , @RequestParam String address , @RequestParam(required = false) MultipartFile file) throws IOException {
 
 
         Optional<Student> s = studentDB.findStudentById(studid);
 
         if(s.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-        if(!upload_photo_func(file , studid)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
+        upload_photo_func(file , studid);
         s.get().setPhoneNumber(phonenumber);
         s.get().setAddress(address);
         s.get().setMail(email);

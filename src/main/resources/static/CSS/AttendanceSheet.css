@@ -1,0 +1,470 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: 0.25s all ease;
+    font-family:Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.p_container {
+  position:static;
+  display:block;
+  width: 100%;
+  overflow-x:auto;
+  overflow-y:auto;
+  font-size: 1.5rem;
+}
+
+#sheetInfo {
+  position: sticky;
+  display: flex;
+  background-color: #eef9ff;
+  width: 100%;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding-left: 20px;
+  padding-right: 20px;
+  z-index: 99;
+}
+
+
+.courseInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  flex: 3; 
+  padding: 0 20px;
+  border-right: 1.5px solid #00125c76; 
+  overflow-y: hidden; 
+  overflow-x: auto;
+}
+
+.belowInfo {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  padding-left: 20px;
+  overflow-y: hidden; 
+  overflow-x: auto; 
+  flex: 4; 
+  padding: 0 20px;
+  flex-direction: column;
+}
+
+#courseDiv{
+  min-width: 25rem;
+}
+
+
+.above-attendance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#emailBtn {
+  left: 1;
+  display: block;
+  min-width: 16rem;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  margin-bottom: .5rem;
+  background-color: #000144;
+  border: #000000;
+  color: #ffffff;
+  padding: .8rem 2.5rem;
+  text-decoration: double;
+  border-radius: 2.5rem;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: rgb(255, 213, 185) 0.2rem 0.2rem 0.1rem;
+}
+
+#emailBtn:hover {
+  border-width: .1rem;
+  background-color: #ff0000;
+  color: #ffffff;
+  transform: scale(1.01);
+}
+
+#reportBtn {
+  left: 1;
+  display: block;
+  min-width: 8rem;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  margin-bottom: .5rem;
+  background-color: #000144;
+  border: #000000;
+  color: #ffffff;
+  padding: .8rem 2.5rem;
+  text-decoration: double;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: rgb(255, 213, 185) 0.2rem 0.2rem 0.1rem;
+}
+
+#reportBtn:hover {
+  border-width: .1rem;
+  background-color: #00d600;
+}
+
+#courseCode {
+  font-size: 2.8rem;
+  font-weight: bolder;
+  color: #ff5e00;
+  margin: 5px 0;
+}
+
+#courseName {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: #02006f;
+  margin: 5px 0;
+}
+
+.cInfo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #000000;
+  margin: 5px 0;
+}
+
+.student-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 10px; /* Adjust the margin as needed */
+}
+
+.student-id {
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 7px 14px;
+  min-width: 12rem;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  margin-right: 10px;
+  margin-top: 10px;
+  box-shadow: #b4b8ff 1.6px 1px 1px; 
+}
+
+.student-id:hover{
+  background-color: #d9d9d98b;
+}
+
+#belowAttHeading{
+  flex: 1;
+  max-width: 30rem;
+  margin: 5px;
+  padding: 5px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #350000;
+}
+
+#table-container {
+  text-align: center;
+  max-width: 99%; /* Set a maximum width for the table container */
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+  overflow-y: auto; /* Enable horizontal scrolling if needed */
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+#attendance-table {
+  padding: 2rem;
+  margin: 3.5rem auto;
+  width: 100%; /* Set the table width to 100% */
+  max-width: 100%; /* Ensure the table doesn't exceed the parent container */
+  border: #000000 0.2rem solid;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: auto; /* Enable horizontal scrolling */
+}
+
+
+#attendance-table th, #attendance-table td {
+    border: 2px solid #100000;
+    padding: 8px;
+    text-align: center;
+    min-width: 90px; /* Set a fixed width for table cells */
+    font-size: large;
+  }
+  
+  #attendance-table th{
+    min-width: 11rem;
+    font-size: large;
+    border-left: #000f7d 0.2rem solid;
+    border-right: #00158a 0.2rem solid;
+}
+
+#attendance-table th:first-child{
+    min-width: 20rem;
+    position: sticky;
+    left: 0;
+    color: white;
+    font-size: large;
+    z-index: 1;
+}
+
+#attendance-table td:first-child {
+  font-weight: bold;
+  min-width: 20rem;
+  position: sticky;
+  left: 0;
+  background-color: #e2f3ff;
+  color: rgb(0, 0, 0);
+  font-size: large;
+  z-index: 1;
+  transition: background-color 0.2s ease-in-out;
+}
+
+#attendance-table tr:hover td:first-child {
+background-color: rgb(116, 209, 255);
+}
+
+#attendance-table th:nth-child(2) {
+  left: 0;
+  color: white;
+  font-size: large;
+  z-index: 1;
+}
+
+#attendance-table td:nth-child(2) {
+  font-weight:400;
+  min-width: 30rem;
+  left: 0;
+  color: rgb(0, 0, 0);
+  font-size: large;
+  z-index: 1;
+}
+
+
+#attendance-table th {
+    background-color: #000b53;
+    color: white;
+}
+
+#attendance-table tr:nth-child(odd) {
+    background-color: #f7feff;
+}
+
+#attendance-table tr:hover {
+    background-color: rgba(147, 172, 255, 0.359);
+}
+
+/* Define the main content area and set its properties */
+.main {
+  flex-grow: 1;
+  padding: 1rem 0rem;
+  min-height: 40vh;
+}
+
+#logout_btn {
+  background-color: #ffffffe4;
+  border: #000000;
+  color: #000000;
+  padding: 1rem 7rem;
+  text-decoration: double;
+  margin: 33rem 0rem 1rem 0rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
+
+#logout_btn:hover {
+  color: #d78e35;
+}
+
+html {
+  font-size: 10px;
+  font-family: "Josefin Sans", sans-serif;
+  min-width: 65rem;
+}
+
+:root {
+  --primary-color: #1d1d1d;
+}
+
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.main {
+  margin-top: 7.3rem;
+}
+.main button {
+  font-size: 15px;
+  border-radius: 1rem !important;
+}
+
+.nav {
+  padding-top: 1.2rem;
+  width: 100%;
+  height: 7.2rem;
+  position: fixed;
+  line-height: 5rem;
+  background-color: #0c18c3e7;
+  justify-content: center;
+  z-index: 100;
+}
+.circular--square { 
+  border-top-left-radius: 50% ; 
+  border-top-right-radius: 50%; 
+  border-bottom-right-radius: 50%; 
+  border-bottom-left-radius:50%;
+  margin-left: 3%;}
+
+.logout-container a {
+  position: relative;
+  text-decoration: none;
+  margin-inline-end: 10rem;
+}
+
+.logout-container img {
+  border-radius: 55%;
+  width: 40px; /* Adjust the width and height as needed */
+  height: 40px;
+  vertical-align: middle;
+}
+
+#sheetSubmitBtn, #csvSubmitBtn {
+  min-width: 16rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  background-color: #000144;
+  border: #000000;
+  color: #ffffff;
+  padding: 0.8rem 1rem;
+  text-decoration: double;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-size:small;
+  font-weight: bold;
+  box-shadow: #a1a1a1 0.2rem 0.1rem .5rem;
+}
+
+#deleteBtn{
+  min-width: 3.8rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  background-color: #ffffff;
+  color: #ff0000;
+  padding: 0.55rem 0rem;
+  text-decoration: double;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-size:small;
+  font-weight: bold;
+  border: #bdbdbd 1px solid;
+  box-shadow: #a1a1a1 0.05rem 0.05rem .2rem;
+}
+
+#sheetSubmitBtn:hover, #csvSubmitBtn:hover{
+  border-width: .1rem;
+  background-color: #ffb700;
+  color: #000000;
+  transform: scale(1.01);
+}
+#deleteBtn:hover{
+  border-width: .1rem;
+  background-color: #ffecec;
+  color: #ffffff;
+}
+
+#btnDiv {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  width: min-content;
+  margin-right: 1rem;
+}
+
+.icon{
+  width: 2.1rem;
+  height: 2.2rem;
+}
+
+.row {
+  display: block;
+  margin-bottom: 10px; /* Adjust the margin as needed */
+}
+
+#selectID {
+  margin: auto; /* Adjust the margin as needed */
+  margin-right: 5px;
+  width: 11.5rem;
+  height: 3.5rem;
+  border-radius: 5px;
+  border: #ffbaba 1px solid;
+  font-size: small;
+}
+
+
+
+#att_percentage {
+  padding: 5px 2px 2px 11px;
+  margin: 0px 10px 2px;
+  font-size: large;
+  border: 2px solid #1c02aa;
+  border-radius: 5px;
+  outline: none;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  min-width: 5rem;
+  max-width: 5rem;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* WebKit browsers */
+  margin: 1px; /* Removes default margin */
+}
+
+@media (max-width: 1000px) {
+  #belowAttHeading{
+    font-size: 20px;
+  }
+  .cInfo {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 760px) {
+  #belowAttHeading{
+    font-size: 16px;
+  }
+  .cInfo {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .nav-text {
+    font-size: 26px;
+  }
+  #belowAttHeading{
+    font-size: 14px;
+  }
+  .cInfo {
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+}
+

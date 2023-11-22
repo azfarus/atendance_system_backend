@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Admin - Student Attendance System</title>
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./CSS/admin.css">
+    </head>
+    <body>
+        <div>
+            <ul class="nav navbar-nav">
+                <li>&nbsp;</li>
+                <li class="text-center"><h2
+                        class="nav-text text-center pl-5 ml-5 mb-3 display-4 text-light"><b>ADMIN
+                            DASHBOARD</b></h2></li>
+                <li class="text-right">
+                    <div class="logout-container">
+                        <a class="mr-5" id="logoutButton" href="login.html">
+                            <img class="mb-3" src="./images/logout.jpg"
+                                alt="Logout">
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="container_main">
+            <div class="p_container">
+                <div class="sidebar">
+                    <h2>- SECTIONS -</h2>
+                    <ul>
+                        <li class="active" data-target="#insertCourseSection">Insert
+                            Course</li>
+                        <li data-target="#insertTeacherSection">Insert Teacher</li>
+                        <li data-target="#insertStudentSection">Insert Student</li>
+                    </ul>
+                </div>
+                <div class="main">
+                    <div class="section active" id="insertCourseSection">
+                        <h1>INSERT COURSES</h1>
+                        <form class="form_ctrl" id="insertCourseForm">
+                            <label for="dept_course">Department:</label>
+                            <select id="dept_course" name="dept_course">
+
+                            </select>
+                            <label for="code_course">Code:</label>
+                            <input class="form-control" type="number"
+                                id="code_course" name="code_course" min="0"
+                                required>
+                            <!-- *Added Later* -->
+                            <label for="course_name">Course Name :</label>
+                            <input class="form-control" type="text"
+                                id="course_name" name="course_name" required>
+                            <label for="semester_course">Semester:</label>
+                            <select id="semester_course" name="semester_course" required>
+                                <option value="" disabled selected>Select Semester</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                            </select>                                
+                            
+                            <label for="section_course">Section:</label>
+                            <select id="section_course" name="section_course" required>
+                                <option value="" disabled selected>Select Section</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+
+                            <label for="student_count_limit">Student Count Limit
+                                :</label>
+                            <input class="form-control" type="number"
+                                id="student_count_limit"
+                                name="student_count_limit" min="0" required>
+                            <button type="submit" id="Add_Course_btn">ADD COURSE</button>
+                        </form>
+                        <form class="form_ctrl" id="CourseCSVForm">
+                            <div class="file-container text-center">
+                                <input type="file" id="csv_file_course"
+                                    class="file-input" name="csv_file"
+                                    accept=".csv">
+                            </div>
+                            <button type="submit" id="Upload_CSV_btn">UPLOAD CSV</button>
+                        </form>
+                    </div>
+                    <div class="section" id="insertTeacherSection">
+                        <h1>INSERT TEACHER</h1>
+                        <form class="form_ctrl" id="insertTeacherForm">
+                            <label for="name_teacher">Name :</label>
+                            <input class="form-control" type="text"
+                                id="name_teacher" name="name_teacher" required>
+                            <label for="id_teacher">Teacher ID :</label>
+                            <input class="form-control" type="text"
+                                id="id_teacher" name="id_teacher" required>
+                            <label for="password_teacher">Password :</label>
+                            <input class="form-control" type="text"
+                                id="password_teacher" name="password_teacher"
+                                required>
+                            <label for="mail_teacher">E-mail Address :</label>
+                            <input class="form-control" type="text"
+                                id="mail_teacher" name="mail_teacher" required>
+                            <button type="submit" id="addTeacherButton">ADD
+                                TEACHER</button>
+                        </form>
+                        <form class="form_ctrl" id="TeacherCSVForm">
+                            <div class="file-container text-center">
+                                <input type="file" id="csv_file_teacher"
+                                    class="file-input" name="csv_file"
+                                    accept=".csv">
+                            </div>
+                            <button type="submit" id="Upload_CSV_btn">UPLOAD CSV</button>
+                        </form>
+                    </div>
+                    <div class="section" id="insertStudentSection">
+                        <h1>INSERT STUDENT</h1>
+                        <form class="form_ctrl" id="insertStudentForm">
+                            <label for="name_student">Name :</label>
+                            <input class="form-control" type="text"
+                                id="name_student" name="name_student" required>
+                            <label for="id_student">Student ID :</label>
+                            <input class="form-control" type="text"
+                                id="id_student" name="id_student" required>
+                            <label for="password_student">Password :</label>
+                            <input class="form-control" type="text"
+                                id="password_student" name="password_student"
+                                required>
+                            <label for="dept_student">Department:</label>
+                            <select id="dept_student" name="dept_student">
+
+                            </select>
+                            <label for="semester_student">Semester :</label>
+                            <input class="form-control" type="number"
+                                id="semester_student" name="semester_student"
+                                min="0" required>
+                            <label for="mail_student">Student E-mail :</label>
+                            <input class="form-control" type="email"
+                                id="mail_student" name="mail_student" required>
+                            <label for="mail_guardian">Guardian E-mail :</label>
+                            <input class="form-control" type="email"
+                                id="mail_guardian" name="mail_guardian" required>
+                            <button type="submit" id="Add_Student_btn">ADD
+                                STUDENT</button>
+                        </form>
+                        <form class="form_ctrl" id="StudentCSVForm">
+                            <div class="file-container text-center">
+                                <input type="file" id="csv_file_student"
+                                    class="file-input" name="csv_file"
+                                    accept=".csv">
+                            </div>
+                            <button type="submit" id="Upload_CSV_btn">UPLOAD CSV</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="./JS/admin.js"></script>
+    </body>
+</html>

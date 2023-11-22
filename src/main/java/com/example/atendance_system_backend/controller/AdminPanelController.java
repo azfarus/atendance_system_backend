@@ -93,7 +93,7 @@ public class AdminPanelController {
 
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
-        System.out.println(section.charAt(0));
+
         Optional<Course> course = courseDB.findCourseByDepartmentAndCourseIdAndSection(department , courseCode , Character.toUpperCase(section.charAt(0)));
         Optional<Teacher> teacher = teacherDB.findTeacherById(teacherid);
 
@@ -188,7 +188,7 @@ public class AdminPanelController {
 
 
         String id = hsr.getHeader("mysession");
-        System.out.println(id);
+
         if(id == null) return  false;
         Optional<MySession> sess= sessionDB.findById(id);
 
@@ -222,7 +222,7 @@ public class AdminPanelController {
                 }
                 Student s = new Student(id , name , mail , pass, semester , dept , null , null , null);
                 studentDB.save(s);
-                //System.out.println(); // Move to the next line for the next record
+
             }
 
             // Close the CSVReader
@@ -266,7 +266,7 @@ public class AdminPanelController {
 
                 Teacher t = new Teacher(id, pass, name, mail, null , null);
                 teacherDB.save(t);
-                //System.out.println(); // Move to the next line for the next record
+
             }
 
             // Close the CSVReader
@@ -304,7 +304,7 @@ public class AdminPanelController {
                     Course course = new Course(null , dept, code , student_count , c , sem ,courseName , new HashSet<>());
                     courseDB.save(course);
 
-                    //System.out.println(); // Move to the next line for the next record
+
                 }
 
                 // Close the CSVReader

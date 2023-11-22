@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./CSS/teacher_dash.css">
+</head>
+    <body>
+        <div>
+            <ul class="nav navbar-nav">
+                <li>&nbsp;</li>
+                <li class="text-center"><h2 class="nav-text text-center pl-5 ml-5 mb-3 display-4 text-light"><b>TEACHER DASHBOARD</b></h2></li>
+                <li class="text-right"><div class="logout-container">
+                    <a class="mr-5" id="logoutButton" href="login.html">
+                        <img class="mb-3" src="./images/logout.jpg" alt="Logout">
+                    </a>
+            </div></li>
+            </ul>
+        </div>
+        <div class="container_main">
+            <div class="p_container">
+                <div class="sidebar">
+                    <center>
+                        <img class="circular--square" src ="images/pp.jpg" id="profilePicture" style="width:260px;height:260px;">
+                        <input type="file" id="profilePictureInput" style="display: none;" accept=".jpg, .jpeg, .png, .gif">
+                        <br><br>
+                    </center>
+                    <div class="p2_container">
+                        <h2 id="t_name">Student Name</h2>
+                        <h2 id="t_id">Student ID</h2>
+                        <h2 id="t_mail">mail@gmail.com</h2>
+                    </div>
+                    <br>
+                    <ul>
+                        <li class="active" data-target="#courseListSection">COURSE LIST</li>
+                        <li data-target="#takeCourseSection">TAKE COURSE</li>
+                    </ul>
+                </div>
+                <div class="main">
+                    <div class="section active" id="courseListSection">
+                        <h1> COURSES </h1>
+                        <div class="course-blocks">
+                            <!-- the course blocks are shown here -->
+                        </div>
+                    </div>
+                    <div class="section" id="takeCourseSection">
+                        <h1>ASSIGN COURSE</h1>
+                        <form class="form_ctrl" id="assignTeacherForm">
+
+                            <label for="dept_teacher">Department:</label>
+                            <select id="dept_teacher" name="dept_teacher">
+                                <option value disabled selected>Select an option</option>
+                            </select>
+
+                            <label for="courses_teacher">Courses:</label>
+                            <select id="courses_teacher" name="courses_teacher">
+                                <option value disabled selected>Select
+                                    Department First</option>
+                            </select>
+
+                            
+                            <!-- <label for="section_teacher">Section:</label>
+                            <select id="section_teacher" name="section_teacher" required>
+                                <option value="" disabled selected>Select Section</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select> -->
+
+                            <button type="submit" id="assignCourseButton">Assign Course</button>
+                        </form>
+                    </div>
+                </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="./JS/teacher_dash.js"></script>
+    </body>
+</html>
