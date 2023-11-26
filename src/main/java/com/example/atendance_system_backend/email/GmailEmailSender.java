@@ -27,6 +27,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.Random;
 
 
 @Service
@@ -74,6 +75,17 @@ public class GmailEmailSender {
 
     @Async
     public void sendEmail(String to, String subject, String body) throws Exception {
+
+
+        double backoff_time = Math.random();
+        int window = 20*1000;
+
+        backoff_time=backoff_time*window;
+
+        Thread.sleep((long)backoff_time);
+
+
+
         MimeMessage mimeMessage = createEmail(to, USER, subject, body);
         Message message = createMessageWithEmail(mimeMessage);
         service.users().messages().send(USER, message).execute();

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -90,8 +91,12 @@ public class ForgotPassController {
         System.out.println(token);
 
         Optional<TokenTable> tktb = tk_DB.findTokenTableByToken(token);
+        long timeout=10*60;
+
 
         if(tktb.isPresent()){
+
+            if(Duration.between(Instant.now() , tktb.get().getTimestamp()).abs().getSeconds() > timeout ) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Expired");
             Optional<Student> stdnt = student_db.findStudentById(tktb.get().getUserId());
             Optional<Teacher> tchr = teacher_db.findTeacherById(tktb.get().getUserId());
             if(stdnt.isPresent()){
