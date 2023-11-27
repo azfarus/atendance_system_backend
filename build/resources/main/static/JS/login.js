@@ -32,7 +32,7 @@ $('#loginButton').click(function() {
         success: function(data) {
             localStorage.setItem("mysession" , data);
             localStorage.setItem("myhash" , hash);
-            alert('Login Successful ' + data);
+            alert('Login Successful ');
             // Redirect to the appropriate dashboard based on the user type
             if(userType=='admin')
                 window.location.href = "admin.html";
