@@ -252,7 +252,7 @@ public class StudentController {
         double present = 0;
 
         for (Attendance x : attendanceListofStudentId){
-            if(x.getStatus().equals("P")){
+            if(x.getStatus().equals("P")  || x.getStatus().equals("L") ){
                 present+=1;
             }
             tot+=1;
