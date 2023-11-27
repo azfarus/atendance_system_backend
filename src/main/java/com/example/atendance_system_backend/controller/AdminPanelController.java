@@ -55,11 +55,15 @@ public class AdminPanelController {
     private ResponseEntity<String> save_teacher(@RequestParam Long id ,
                                                 @RequestParam String password ,
                                                 @RequestParam String name ,
-                                                @RequestParam String email , HttpServletRequest hsr){
+                                                @RequestParam String email , HttpServletRequest hsr) throws Exception {
 
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         Teacher new_teacher = new Teacher(id , password , name , email , null , null);
         teacherDB.save(new_teacher);
+        if(mailsender.emailValidityChecker(email)){
+            String mailbody = "You have been registered as a teacher.\nID: "+id+"\nPassword: "+password;
+            mailsender.sendEmail(email , "Registration done" ,mailbody );
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
     }
 
@@ -120,13 +124,18 @@ public class AdminPanelController {
                                                @RequestParam String email ,
                                                @RequestParam String guardianEmail,
                                                 @RequestParam String department ,
-                                               @RequestParam Long semester , HttpServletRequest hsr){
+                                               @RequestParam Long semester , HttpServletRequest hsr) throws Exception {
 
         if(!check_session(hsr)) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 
 
+
         Student new_student = new Student(id , name , email , password , semester , department , null , null , null);
         studentDB.save(new_student);
+        if(mailsender.emailValidityChecker(email)){
+            String mailbody = "You have been registered as a Student.\nID: "+id+"\nPassword: "+password;
+            mailsender.sendEmail(email , "Registration done" ,mailbody );
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("COOL");
     }
 
